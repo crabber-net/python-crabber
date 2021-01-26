@@ -4,6 +4,7 @@ import re
 import requests
 from typing import Dict, List, Optional
 
+
 class API:
     def __init__(self, api_key: str, access_token: Optional[str] = None,
                  base_url: str = 'https://crabber.net',
@@ -14,7 +15,7 @@ class API:
         self.base_endpoint: str = base_endpoint
         self.crab: Optional['Crab'] = None
         self._crabs: Dict[int, Optional['Crab']] = dict()
-        self._molts: Dict[int, Optioinal['Molt']] = dict()
+        self._molts: Dict[int, Optional['Molt']] = dict()
 
         self._check_connection()
         if access_token:
@@ -96,7 +97,7 @@ class API:
         """
         if len(content) <= 240:
             if self.access_token:
-                r = self._make_request(f'/molts/', method='POST',
+                r = self._make_request('/molts/', method='POST',
                                        data={'content': content})
                 if r.ok:
                     return self._objectify(r.json(), 'molt')
@@ -165,11 +166,11 @@ class API:
                 r = requests.get(self.base_url + self.base_endpoint + endpoint,
                                  params)
             elif method.upper() == 'POST':
-                r = requests.post(self.base_url + self.base_endpoint + endpoint,
-                                  params=params, data=data)
+                r = requests.post(self.base_url + self.base_endpoint
+                                  + endpoint, params=params, data=data)
             elif method.upper() == 'DELETE':
-                r = requests.delete(self.base_url + self.base_endpoint + endpoint,
-                                    params=params)
+                r = requests.delete(self.base_url + self.base_endpoint
+                                    + endpoint, params=params)
             else:
                 raise ValueError(f'Unknown method: "{method.upper()}"')
             if r.ok or r.status_code in (404, 400):
@@ -296,7 +297,7 @@ class Crab:
             'crabs'
         )
         return [self.api._objectify(crab_json, 'crab')
-                for crab_json in followers_json]
+                for crab_json in following_json]
 
     @property
     def following_count(self) -> int:
@@ -317,7 +318,8 @@ class Crab:
     def get_molts(self, limit=10, offset=0) -> List['Molt']:
         r = self.api._make_request(f'/crabs/{self.id}/molts/',
                                    params={'limit': limit, 'offset': offset})
-        return [self.api._objectify(molt, 'molt') for molt in r.json()['molts']]
+        return [self.api._objectify(molt, 'molt')
+                for molt in r.json()['molts']]
 
     @property
     def register_time(self) -> datetime:
@@ -489,4 +491,3 @@ def parse_error_message(html_body: str) -> str:
     """
     return re.search(r'<title>([^<]+)</title>(?:.|\s)+<p>([^<]+)</p>',
                      html_body).groups()
-
