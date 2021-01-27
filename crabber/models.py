@@ -1,6 +1,5 @@
 from datetime import datetime
 from .exceptions import MaxTriesError, RequiresAuthenticationError
-import re
 import requests
 from typing import Dict, List, Optional
 
@@ -511,10 +510,3 @@ class Molt:
                 )
         else:
             raise ValueError('Molts cannot exceed 240 characters.')
-
-
-def parse_error_message(html_body: str) -> str:
-    """ Gets error title and description from HTML page.
-    """
-    return re.search(r'<title>([^<]+)</title>(?:.|\s)+<p>([^<]+)</p>',
-                     html_body).groups()

@@ -123,4 +123,4 @@ class TestAPI:
 class TestUtils:
     def test_parse_error_message(self):
         for error in sample_error_html:
-            assert crabber.models.parse_error_message(error) is not None
+            assert crabber.utils.parse_error_message(error) is not None

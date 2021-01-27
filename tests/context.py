@@ -6,6 +6,7 @@ sys.path.insert(0, os.path.abspath(
 
 import crabber
 import crabber.models
+import crabber.utils
 # Authentication belongs to @PyTest on Crabber
 API_KEY = '7f94ebd306f12fe13e983fe0fb78b696'
 ACCESS_TOKEN = '16c24b2e825acfb6af191d66c46e2369'
