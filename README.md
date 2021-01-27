@@ -57,3 +57,12 @@ True
 >>> api.post_molt('Hello, world!')
 <Molt [683]>
 ```
+
+It is also possible to authenticate while intializing the API object rather than
+afterwards.
+
+``` python3
+>>> api = crabber.API(api_key=YOUR_DEVELOPER_KEY, access_token=YOUR_ACCESS_TOKEN)
+>>> api.get_current_user()
+<Crab @thedude [85]>
+```
