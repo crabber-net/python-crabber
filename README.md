@@ -1,10 +1,11 @@
-# Python-Crabber
+# python-crabber
+
+![Python package](https://github.com/jakeledoux/python-crabber/workflows/Python%20package/badge.svg)
+[![PyPI version](https://badge.fury.io/py/python-crabber.svg)](https://badge.fury.io/py/python-crabber)
 
 A Python client for the Crabber.net REST API.
 
 ## Installation
-
-Python-Crabber [is on PyPi](https://pypi.org/project/python-crabber/).
 
 ``` bash
 pip install python-crabber
