@@ -1,7 +1,8 @@
 from datetime import datetime
 from .exceptions import MaxTriesError, RequiresAuthenticationError
+import os
 import requests
-from typing import Dict, List, Optional
+from typing import BinaryIO, Dict, List, Optional
 
 
 class API:
@@ -93,13 +94,22 @@ class API:
         return [self._objectify(molt, 'molt')
                 for molt in r.json().get('molts', list())]
 
-    def post_molt(self, content: str):
+    def post_molt(self, content: str, image_path: Optional[str] = None):
         """ Post new Molt as the authenticated user.
         """
         if len(content) <= 240:
             if self.access_token:
-                r = self._make_request('/molts/', method='POST',
-                                       data={'content': content})
+                if image_path:
+                    if not os.path.exists(image_path):
+                        raise FileNotFoundError('The image path provided does '
+                                                'not point to a valid file.')
+                    with open(image_path, 'rb') as image_file:
+                        r = self._make_request('/molts/', method='POST',
+                                               data={'content': content},
+                                               image=image_file)
+                else:
+                    r = self._make_request('/molts/', method='POST',
+                                           data={'content': content})
                 if r.ok:
                     return self._objectify(r.json(), 'molt')
                 else:
@@ -149,7 +159,9 @@ class API:
 
     def _make_request(self, endpoint: str = '', method: str = 'GET',
                       params: Optional[dict] = None,
-                      data: Optional[dict] = None, max_attempts: int = 10) \
+                      data: Optional[dict] = None,
+                      image: Optional[BinaryIO] = None,
+                      max_attempts: int = 10) \
             -> requests.models.Response:
 
         # Ensure endpoint is encapsulated in forward-slashes
@@ -168,8 +180,13 @@ class API:
                 r = requests.get(self.base_url + self.base_endpoint + endpoint,
                                  params)
             elif method.upper() == 'POST':
+                if image:
+                    files = {'image': image}
+                else:
+                    files = None
                 r = requests.post(self.base_url + self.base_endpoint
-                                  + endpoint, params=params, data=data)
+                                  + endpoint, params=params, data=data,
+                                  files=files)
             elif method.upper() == 'DELETE':
                 r = requests.delete(self.base_url + self.base_endpoint
                                     + endpoint, params=params)
@@ -492,11 +509,20 @@ class Molt:
             'You are not properly authenticated for this request.'
         )
 
-    def reply(self, content: str):
+    def reply(self, content: str, image_path: Optional[str] = None):
         """ Reply to this Molt as the authenticated user.
         """
         if len(content) <= 240:
             if self.api.access_token:
+                if image_path:
+                    if not os.path.exists(image_path):
+                        raise FileNotFoundError('The image path provided does '
+                                                'not point to a valid file.')
+                    with open(image_path, 'rb') as image_file:
+                        r = self.api._make_request(f'/molts/{self.id}/reply/',
+                                                   method='POST',
+                                                   data={'content': content},
+                                                   iamge=image_file)
                 r = self.api._make_request(f'/molts/{self.id}/reply/',
                                            method='POST',
                                            data={'content': content})
