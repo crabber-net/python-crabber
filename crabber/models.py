@@ -289,7 +289,6 @@ class Crab:
                 r = self.api._make_request(f'/crabs/{self.id}/bio/')
                 if r.ok:
                     self._json = r.json()
-            _bio = self._json.get('bio')
             self._bio = Bio(crab=self)
         return self._bio
 
@@ -376,6 +375,7 @@ class Crab:
                                    params={'limit': limit, 'offset': offset})
         return [self.api._objectify(molt, 'molt')
                 for molt in r.json().get('molts', list())]
+
 
 class Molt:
     def __init__(self, json: dict, api: 'API'):
