@@ -1,8 +1,8 @@
 from datetime import datetime
 from .exceptions import MaxTriesError, RequiresAuthenticationError
-import re
+import os
 import requests
-from typing import Dict, List, Optional
+from typing import BinaryIO, Dict, List, Optional
 
 
 class API:
@@ -94,13 +94,22 @@ class API:
         return [self._objectify(molt, 'molt')
                 for molt in r.json().get('molts', list())]
 
-    def post_molt(self, content: str):
+    def post_molt(self, content: str, image_path: Optional[str] = None):
         """ Post new Molt as the authenticated user.
         """
         if len(content) <= 240:
             if self.access_token:
-                r = self._make_request('/molts/', method='POST',
-                                       data={'content': content})
+                if image_path:
+                    if not os.path.exists(image_path):
+                        raise FileNotFoundError('The image path provided does '
+                                                'not point to a valid file.')
+                    with open(image_path, 'rb') as image_file:
+                        r = self._make_request('/molts/', method='POST',
+                                               data={'content': content},
+                                               image=image_file)
+                else:
+                    r = self._make_request('/molts/', method='POST',
+                                           data={'content': content})
                 if r.ok:
                     return self._objectify(r.json(), 'molt')
                 else:
@@ -150,7 +159,9 @@ class API:
 
     def _make_request(self, endpoint: str = '', method: str = 'GET',
                       params: Optional[dict] = None,
-                      data: Optional[dict] = None, max_attempts: int = 10) \
+                      data: Optional[dict] = None,
+                      image: Optional[BinaryIO] = None,
+                      max_attempts: int = 10) \
             -> requests.models.Response:
 
         # Ensure endpoint is encapsulated in forward-slashes
@@ -169,8 +180,13 @@ class API:
                 r = requests.get(self.base_url + self.base_endpoint + endpoint,
                                  params)
             elif method.upper() == 'POST':
+                if image:
+                    files = {'image': image}
+                else:
+                    files = None
                 r = requests.post(self.base_url + self.base_endpoint
-                                  + endpoint, params=params, data=data)
+                                  + endpoint, params=params, data=data,
+                                  files=files)
             elif method.upper() == 'DELETE':
                 r = requests.delete(self.base_url + self.base_endpoint
                                     + endpoint, params=params)
@@ -203,14 +219,15 @@ class API:
 
 
 class Bio:
-    def __init__(self, json: dict, crab: 'Crab'):
-        self._json: dict = json
+    def __init__(self, crab: 'Crab'):
         self.crab: 'Crab' = crab
-        if not self._json:
-            raise ValueError('Cannot construct Bio from empty JSON.')
 
     def __repr__(self):
         return f'<Bio @{self.crab.username} [{self.crab.id}]>'
+
+    @property
+    def _json(self) -> dict:
+        return self.crab._json.get('bio')
 
     @property
     def age(self) -> Optional[str]:
@@ -248,6 +265,22 @@ class Bio:
     def remember_when(self) -> Optional[str]:
         return self._json.get('remember')
 
+    def update(self, age: Optional[str] = None,
+               description: Optional[str] = None,
+               favorite_emoji: Optional[str] = None, jam: Optional[str] = None,
+               location: Optional[str] = None, obsession: Optional[str] = None,
+               pronouns: Optional[str] = None, quote: Optional[str] = None,
+               remember_when: Optional[str] = None) -> bool:
+        new_bio = dict(age=age, description=description, emoji=favorite_emoji,
+                       jam=jam, location=location, obsession=obsession,
+                       pronouns=pronouns, quote=quote, remember=remember_when)
+        r = self.crab.api._make_request(f'/crabs/{self.crab.id}/bio/', 'POST',
+                                        data=new_bio)
+        if r.ok:
+            self.crab._json = r.json()
+            return True
+        return r
+
 
 class Crab:
     def __init__(self, json: dict, api: 'API'):
@@ -272,8 +305,7 @@ class Crab:
                 r = self.api._make_request(f'/crabs/{self.id}/bio/')
                 if r.ok:
                     self._json = r.json()
-            _bio = self._json.get('bio')
-            self._bio = Bio(_bio, crab=self)
+            self._bio = Bio(crab=self)
         return self._bio
 
     @property
@@ -318,12 +350,6 @@ class Crab:
     def username(self) -> str:
         return self._json['username']
 
-    def get_molts(self, limit=10, offset=0) -> List['Molt']:
-        r = self.api._make_request(f'/crabs/{self.id}/molts/',
-                                   params={'limit': limit, 'offset': offset})
-        return [self.api._objectify(molt, 'molt')
-                for molt in r.json().get('molts', list())]
-
     @property
     def register_time(self) -> datetime:
         return datetime.fromtimestamp(self.timestamp)
@@ -359,6 +385,12 @@ class Crab:
         """
         return self.api.get_molts_mentioning(self.username, limit=limit,
                                              offset=offset)
+
+    def get_molts(self, limit=10, offset=0) -> List['Molt']:
+        r = self.api._make_request(f'/crabs/{self.id}/molts/',
+                                   params={'limit': limit, 'offset': offset})
+        return [self.api._objectify(molt, 'molt')
+                for molt in r.json().get('molts', list())]
 
 
 class Molt:
@@ -477,11 +509,20 @@ class Molt:
             'You are not properly authenticated for this request.'
         )
 
-    def reply(self, content: str):
+    def reply(self, content: str, image_path: Optional[str] = None):
         """ Reply to this Molt as the authenticated user.
         """
         if len(content) <= 240:
             if self.api.access_token:
+                if image_path:
+                    if not os.path.exists(image_path):
+                        raise FileNotFoundError('The image path provided does '
+                                                'not point to a valid file.')
+                    with open(image_path, 'rb') as image_file:
+                        r = self.api._make_request(f'/molts/{self.id}/reply/',
+                                                   method='POST',
+                                                   data={'content': content},
+                                                   iamge=image_file)
                 r = self.api._make_request(f'/molts/{self.id}/reply/',
                                            method='POST',
                                            data={'content': content})
@@ -495,10 +536,3 @@ class Molt:
                 )
         else:
             raise ValueError('Molts cannot exceed 240 characters.')
-
-
-def parse_error_message(html_body: str) -> str:
-    """ Gets error title and description from HTML page.
-    """
-    return re.search(r'<title>([^<]+)</title>(?:.|\s)+<p>([^<]+)</p>',
-                     html_body).groups()

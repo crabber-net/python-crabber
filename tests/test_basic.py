@@ -87,11 +87,26 @@ class TestAPI:
         assert test_user is not None
         assert crabber_user is not None
 
+        # Test bio
+        old_location = test_user.bio.location
+        assert test_user.bio.update(location='In a computer!')
+        assert test_user.bio.location != old_location
+        assert test_user.bio.update(location=old_location)
+
+        # Test following relationships and actions
         assert test_user.follow() == False
         assert crabber_user.follow()
         assert crabber_user in test_user.following
         assert crabber_user.unfollow()
         assert crabber_user not in test_user.following
+
+        # Test image failures
+        with pytest.raises(FileNotFoundError):
+            api.post_molt('Look at this photograph!',
+                          image_path='fake_image.jpg')
+        with pytest.raises(FileNotFoundError):
+            molt = api.get_molt(1)
+            molt.reply('Look at this photograph!', image_path='fake_image.jpg')
 
         molt = api.post_molt('Hello, world! This is a test Molt and this ' \
                              'action was performed automatically.')
@@ -123,4 +138,4 @@ class TestAPI:
 class TestUtils:
     def test_parse_error_message(self):
         for error in sample_error_html:
-            assert crabber.models.parse_error_message(error) is not None
+            assert crabber.utils.parse_error_message(error) is not None
