@@ -23,7 +23,12 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# MacOS bullshit
 .DS_Store
-__pycache__
-*.pyc
-venv
+
+# Virtual Environment
+venv/
+env/
+
+# Testing
+.coverage
