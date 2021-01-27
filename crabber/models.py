@@ -82,7 +82,8 @@ class API:
         """
         r = self._make_request(f'/crabtag/{crabtag}/',
                                params={'limit': limit, 'offset': offset})
-        return [self._objectify(molt, 'molt') for molt in r.json()['molts']]
+        return [self._objectify(molt, 'molt')
+                for molt in r.json().get('molts', list())]
 
     def get_molts_mentioning(self, username: str, limit=10, offset=0) \
             -> List['Molt']:
@@ -90,7 +91,8 @@ class API:
         """
         r = self._make_request(f'/molts/mentioning/{username}/',
                                params={'limit': limit, 'offset': offset})
-        return [self._objectify(molt, 'molt') for molt in r.json()['molts']]
+        return [self._objectify(molt, 'molt')
+                for molt in r.json().get('molts', list())]
 
     def post_molt(self, content: str):
         """ Post new Molt as the authenticated user.
@@ -113,17 +115,10 @@ class API:
     def _check_connection(self):
         r = self._make_request()
         if r.ok:
-            if r.text == 'Congrats. You\'ve taken your first step into a ' \
-               'larger world.':
-                return True
-            else:
-                raise ConnectionError('Site responded incorrectly. '
-                                      'Is your base_url accurate?')
-        elif r.status_code == 404:
+            return True
+        else:
             raise ConnectionError('Site responded incorrectly. '
                                   'Is your base_url accurate?')
-        else:
-            raise ConnectionError(': '.join(parse_error_message(r.text)))
 
     def _get_paginated_data(self, endpoint: str, data_key: str,
                             limit: int = 10, starting_offset: int = 0):
@@ -134,9 +129,17 @@ class API:
                                                      'limit': limit})
             if r.ok:
                 data = r.json()
+
+                # No results returned
+                if data['count'] == 0:
+                    break
+
                 json_data += data[data_key]
+
+                # No more data to get
                 if data['total'] <= data['offset'] + data['count']:
                     break
+                # Still more data to get
                 else:
                     offset = data['offset'] + data['count']
 
@@ -319,7 +322,7 @@ class Crab:
         r = self.api._make_request(f'/crabs/{self.id}/molts/',
                                    params={'limit': limit, 'offset': offset})
         return [self.api._objectify(molt, 'molt')
-                for molt in r.json()['molts']]
+                for molt in r.json().get('molts', list())]
 
     @property
     def register_time(self) -> datetime:
@@ -398,8 +401,16 @@ class Molt:
             return self.api.base_url + self._json['image']
 
     @property
+    def likes(self) -> int:
+        return self._json['likes']
+
+    @property
     def mentions(self) -> List[str]:
         return self._json['mentions']
+
+    @property
+    def remolts(self) -> int:
+        return self._json['remolts']
 
     @property
     def replying_to(self) -> Optional['Molt']:
