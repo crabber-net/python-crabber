@@ -203,14 +203,15 @@ class API:
 
 
 class Bio:
-    def __init__(self, json: dict, crab: 'Crab'):
-        self._json: dict = json
+    def __init__(self, crab: 'Crab'):
         self.crab: 'Crab' = crab
-        if not self._json:
-            raise ValueError('Cannot construct Bio from empty JSON.')
 
     def __repr__(self):
         return f'<Bio @{self.crab.username} [{self.crab.id}]>'
+
+    @property
+    def _json(self) -> dict:
+        return self.crab._json.get('bio')
 
     @property
     def age(self) -> Optional[str]:
@@ -248,6 +249,22 @@ class Bio:
     def remember_when(self) -> Optional[str]:
         return self._json.get('remember')
 
+    def update(self, age: Optional[str] = None,
+               description: Optional[str] = None,
+               favorite_emoji: Optional[str] = None, jam: Optional[str] = None,
+               location: Optional[str] = None, obsession: Optional[str] = None,
+               pronouns: Optional[str] = None, quote: Optional[str] = None,
+               remember_when: Optional[str] = None) -> bool:
+        new_bio = dict(age=age, description=description, emoji=favorite_emoji,
+                       jam=jam, location=location, obsession=obsession,
+                       pronouns=pronouns, quote=quote, remember=remember_when)
+        r = self.crab.api._make_request(f'/crabs/{self.crab.id}/bio/', 'POST',
+                                        data=new_bio)
+        if r.ok:
+            self.crab._json = r.json()
+            return True
+        return r
+
 
 class Crab:
     def __init__(self, json: dict, api: 'API'):
@@ -273,7 +290,7 @@ class Crab:
                 if r.ok:
                     self._json = r.json()
             _bio = self._json.get('bio')
-            self._bio = Bio(_bio, crab=self)
+            self._bio = Bio(crab=self)
         return self._bio
 
     @property
@@ -318,12 +335,6 @@ class Crab:
     def username(self) -> str:
         return self._json['username']
 
-    def get_molts(self, limit=10, offset=0) -> List['Molt']:
-        r = self.api._make_request(f'/crabs/{self.id}/molts/',
-                                   params={'limit': limit, 'offset': offset})
-        return [self.api._objectify(molt, 'molt')
-                for molt in r.json().get('molts', list())]
-
     @property
     def register_time(self) -> datetime:
         return datetime.fromtimestamp(self.timestamp)
@@ -360,6 +371,11 @@ class Crab:
         return self.api.get_molts_mentioning(self.username, limit=limit,
                                              offset=offset)
 
+    def get_molts(self, limit=10, offset=0) -> List['Molt']:
+        r = self.api._make_request(f'/crabs/{self.id}/molts/',
+                                   params={'limit': limit, 'offset': offset})
+        return [self.api._objectify(molt, 'molt')
+                for molt in r.json().get('molts', list())]
 
 class Molt:
     def __init__(self, json: dict, api: 'API'):
