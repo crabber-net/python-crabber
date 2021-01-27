@@ -401,8 +401,16 @@ class Molt:
             return self.api.base_url + self._json['image']
 
     @property
+    def likes(self) -> int:
+        return self._json['likes']
+
+    @property
     def mentions(self) -> List[str]:
         return self._json['mentions']
+
+    @property
+    def remolts(self) -> int:
+        return self._json['remolts']
 
     @property
     def replying_to(self) -> Optional['Molt']:

@@ -44,6 +44,8 @@ class TestAPI:
         assert molt is not None
         assert isinstance(molt.author, crabber.Crab)
         assert isinstance(molt.id, int)
+        assert isinstance(molt.likes, int)
+        assert isinstance(molt.remolts, int)
 
         # Test Molt caching
         assert api.get_molt(molt.id) is molt
