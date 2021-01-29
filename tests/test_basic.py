@@ -82,23 +82,23 @@ class TestAPI:
 
         api.base_url = old_base_url
 
-        test_user = api.get_current_user()
-        crabber_user = api.get_crab_by_username('crabber')
+        this_user = api.get_current_user()
+        test_user = api.get_crab_by_username('test_account')
+        assert this_user is not None
         assert test_user is not None
-        assert crabber_user is not None
 
         # Test bio
-        old_location = test_user.bio.location
-        assert test_user.bio.update(location='In a computer!')
-        assert test_user.bio.location != old_location
-        assert test_user.bio.update(location=old_location)
+        old_location = this_user.bio.location
+        assert this_user.bio.update(location='In a computer!')
+        assert this_user.bio.location != old_location
+        assert this_user.bio.update(location=old_location)
 
         # Test following relationships and actions
-        assert test_user.follow() == False
-        assert crabber_user.follow()
-        assert crabber_user in test_user.following
-        assert crabber_user.unfollow()
-        assert crabber_user not in test_user.following
+        assert this_user.follow() == False
+        assert test_user.follow()
+        assert test_user in this_user.following
+        assert test_user.unfollow()
+        assert test_user not in this_user.following
 
         # Test image failures
         with pytest.raises(FileNotFoundError):
@@ -117,12 +117,12 @@ class TestAPI:
             api.post_molt('A' * 500)
             molt.reply('A' * 500)
 
-        assert molt in test_user.get_molts()
+        assert molt in this_user.get_molts()
         assert molt.like()
         assert molt.unlike()
         assert molt.remolt() == False
         assert molt.delete()
-        assert molt not in test_user.get_molts()
+        assert molt not in this_user.get_molts()
 
         molt = api.post_molt('Hello, @PyTest! This is a test Molt and this ' \
                              'action was performed automatically. %pytest')
