@@ -454,6 +454,14 @@ class Molt:
     def timestamp(self) -> int:
         return self._json['timestamp']
 
+    def get_replies(self, limit=10, offset=0) -> List['Molt']:
+        """ Get this Molt's replies.
+        """
+        r = self.api._make_request(f'/molts/{self.id}/replies/',
+                                   params={'limit': limit, 'offset': offset})
+        return [self.api._objectify(molt, 'molt')
+                for molt in r.json().get('molts', list())]
+
     def like(self):
         """ Like this Molt as the authenticated user.
         """

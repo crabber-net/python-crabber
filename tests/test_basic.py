@@ -126,8 +126,10 @@ class TestAPI:
 
         molt = api.post_molt('Hello, @PyTest! This is a test Molt and this ' \
                              'action was performed automatically. %pytest')
-        reply = molt.reply('Testing replies! %pytest')
         assert molt in api.get_molts_mentioning('pytest')
+        reply = molt.reply('Testing replies! %pytest')
+        assert reply in molt.get_replies()
+        assert reply.replying_to is molt
         pytest_crabtag = api.get_molts_with_crabtag('pytest')
         assert molt in pytest_crabtag
         assert reply in pytest_crabtag
