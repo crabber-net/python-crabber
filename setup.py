@@ -5,7 +5,7 @@ with open('README.md') as f:
 
 setup(
     name='python-crabber',
-    version='0.2.2',
+    version='0.2.3',
     description='A Python client for the Crabber REST API.',
     long_description=readme,
     long_description_content_type='text/markdown',
