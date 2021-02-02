@@ -1,7 +1,6 @@
 # python-crabber
 
-![Python package](https://github.com/jakeledoux/python-crabber/workflows/Python%20package/badge.svg)
-[![PyPI version](https://badge.fury.io/py/python-crabber.svg)](https://badge.fury.io/py/python-crabber)
+[![PyPI version](https://img.shields.io/pypi/v/python-crabber)
 
 A Python client for the Crabber.net REST API.
 
