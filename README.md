@@ -1,6 +1,6 @@
 # python-crabber
 
-[![PyPI version](https://img.shields.io/pypi/v/python-crabber)
+![PyPI version](https://img.shields.io/pypi/v/python-crabber)
 
 A Python client for the Crabber.net REST API.
 
