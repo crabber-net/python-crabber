@@ -2,7 +2,7 @@ from datetime import datetime
 from .exceptions import MaxTriesError, RequiresAuthenticationError
 import os
 import requests
-from typing import BinaryIO, Dict, List, Optional
+from typing import BinaryIO, Dict, List, Optional, Union
 
 
 class API:
@@ -76,21 +76,25 @@ class API:
             self._molts[molt_id] = None
             return None
 
-    def get_molts_with_crabtag(self, crabtag: str, limit=10, offset=0) \
+    def get_molts_with_crabtag(self, crabtag: str, limit=10, offset=0,
+                               since_ts=None) \
             -> List['Molt']:
         """ Get molts that contain the crabtag `crabtag`.
         """
         r = self._make_request(f'/crabtag/{crabtag}/',
-                               params={'limit': limit, 'offset': offset})
+                               params={'limit': limit, 'offset': offset,
+                                       'since': since_ts})
         return [self._objectify(molt, 'molt')
                 for molt in r.json().get('molts', list())]
 
-    def get_molts_mentioning(self, username: str, limit=10, offset=0) \
+    def get_molts_mentioning(self, username: str, limit=10, offset=0,
+                             since_ts=None) \
             -> List['Molt']:
         """ Get Molts that explicitly mention `username`.
         """
         r = self._make_request(f'/molts/mentioning/{username}/',
-                               params={'limit': limit, 'offset': offset})
+                               params={'limit': limit, 'offset': offset,
+                                       'since': since_ts})
         return [self._objectify(molt, 'molt')
                 for molt in r.json().get('molts', list())]
 
@@ -380,15 +384,18 @@ class Crab:
             'You are not properly authenticated for this request.'
         )
 
-    def get_mentions(self, limit: int = 10, offset: int = 0):
+    def get_mentions(self, limit: int = 10, offset: int = 0,
+                     since_ts: Optional[Union[int, str]] = None):
         """ Get Molts that mention this user.
         """
         return self.api.get_molts_mentioning(self.username, limit=limit,
-                                             offset=offset)
+                                             offset=offset, since_ts=since_ts)
 
-    def get_molts(self, limit=10, offset=0) -> List['Molt']:
+    def get_molts(self, limit=10, offset=0,
+                  since_ts: Optional[Union[int, str]] = None) -> List['Molt']:
         r = self.api._make_request(f'/crabs/{self.id}/molts/',
-                                   params={'limit': limit, 'offset': offset})
+                                   params={'limit': limit, 'offset': offset,
+                                           'since': since_ts})
         return [self.api._objectify(molt, 'molt')
                 for molt in r.json().get('molts', list())]
 
@@ -454,11 +461,12 @@ class Molt:
     def timestamp(self) -> int:
         return self._json['timestamp']
 
-    def get_replies(self, limit=10, offset=0) -> List['Molt']:
+    def get_replies(self, limit=10, offset=0, since_ts=None) -> List['Molt']:
         """ Get this Molt's replies.
         """
         r = self.api._make_request(f'/molts/{self.id}/replies/',
-                                   params={'limit': limit, 'offset': offset})
+                                   params={'limit': limit, 'offset': offset,
+                                           'since': since_ts})
         return [self.api._objectify(molt, 'molt')
                 for molt in r.json().get('molts', list())]
 
