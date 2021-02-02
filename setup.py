@@ -13,5 +13,8 @@ setup(
     author_email='contactjakeledoux@gmail.com',
     url='https://github.com/jakeledoux/python-crabber',
     license='GNU General Public License v2.0',
-    packages=find_packages(exclude=('tests', 'docs'))
+    packages=find_packages(exclude=('tests', 'docs')),
+    install_requires=[
+        'requests'
+    ],
 )
