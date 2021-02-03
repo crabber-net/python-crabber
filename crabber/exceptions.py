@@ -1,5 +1,6 @@
 class MaxTriesError(BaseException):
-    """ Raised when attempts to make a request exceed maximum number of attempts.
+    """ Raised when attempts to make a request exceed maximum number of
+        attempts.
     """
     pass
 

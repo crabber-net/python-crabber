@@ -2,7 +2,7 @@ from datetime import datetime
 from .exceptions import MaxTriesError, RequiresAuthenticationError
 import os
 import requests
-from typing import BinaryIO, Dict, List, Optional, Union
+from typing import Any, BinaryIO, Dict, List, Optional, Union
 
 
 class API:
@@ -21,13 +21,13 @@ class API:
         if access_token:
             self.authenticate(access_token)
 
-    def authenticate(self, access_token: str):
+    def authenticate(self, access_token: str) -> bool:
         self.access_token = access_token
         r = self._make_request('/authenticate/')
         self.crab = self._objectify(r.json(), 'crab')
         return r.ok
 
-    def get_current_user(self):
+    def get_current_user(self) -> 'Crab':
         """ Get the current authenticated user.
         """
         return self.crab
@@ -76,9 +76,9 @@ class API:
             self._molts[molt_id] = None
             return None
 
-    def get_molts_with_crabtag(self, crabtag: str, limit=10, offset=0,
-                               since_ts=None, since_id=None) \
-            -> List['Molt']:
+    def get_molts_with_crabtag(self, crabtag: str, limit: int = 10,
+                               offset: int = 0, since_ts: Optional[int] = None,
+                               since_id: Optional[int] = None) -> List['Molt']:
         """ Get molts that contain the crabtag `crabtag`.
         """
         r = self._make_request(f'/crabtag/{crabtag}/',
@@ -88,31 +88,32 @@ class API:
         return [self._objectify(molt, 'molt')
                 for molt in r.json().get('molts', list())]
 
-    def get_molts_mentioning(self, username: str, limit=10, offset=0,
-                             since_ts=None, since_id=None) \
-            -> List['Molt']:
+    def get_molts_mentioning(self, username: str, limit: int = 10,
+                             offset: int = 0, since_ts: Optional[int] = None,
+                             since_id: Optional[int] = None) -> List['Molt']:
         """ Get Molts that explicitly mention `username`.
         """
         r = self._make_request(f'/molts/mentioning/{username}/',
                                params={'limit': limit, 'offset': offset,
                                        'since': since_ts,
-                                        'since_id': since_id})
+                                       'since_id': since_id})
         return [self._objectify(molt, 'molt')
                 for molt in r.json().get('molts', list())]
 
-    def get_molts_replying_to(self, username: str, limit=10, offset=0,
-                              since_ts=None, since_id=None) \
-            -> List['Molt']:
+    def get_molts_replying_to(self, username: str, limit: int = 10,
+                              offset: int = 0, since_ts: Optional[int] = None,
+                              since_id: Optional[int] = None) -> List['Molt']:
         """ Get Molts that reply to Molts submitted by `username`.
         """
         r = self._make_request(f'/molts/replying/{username}/',
                                params={'limit': limit, 'offset': offset,
                                        'since': since_ts,
-                                        'since_id': since_id})
+                                       'since_id': since_id})
         return [self._objectify(molt, 'molt')
                 for molt in r.json().get('molts', list())]
 
-    def post_molt(self, content: str, image_path: Optional[str] = None):
+    def post_molt(self, content: str, image_path: Optional[str] = None) \
+            -> Optional['Molt']:
         """ Post new Molt as the authenticated user.
         """
         if len(content) <= 240:
@@ -131,7 +132,7 @@ class API:
                 if r.ok:
                     return self._objectify(r.json(), 'molt')
                 else:
-                    return False
+                    return None
             else:
                 raise RequiresAuthenticationError(
                     'You are not properly authenticated for this request.'
@@ -139,7 +140,7 @@ class API:
         else:
             raise ValueError('Molts cannot exceed 240 characters.')
 
-    def _check_connection(self):
+    def _check_connection(self) -> bool:
         r = self._make_request()
         if r.ok:
             return True
@@ -148,7 +149,8 @@ class API:
                                   'Is your base_url accurate?')
 
     def _get_paginated_data(self, endpoint: str, data_key: str,
-                            limit: int = 10, starting_offset: int = 0):
+                            limit: int = 10, starting_offset: int = 0) \
+            -> Dict[str, Any]:
         json_data = list()
         offset = starting_offset
         while True:
@@ -219,7 +221,7 @@ class API:
         else:
             raise MaxTriesError('Failed to complete request.')
 
-    def _objectify(self, json: dict, type: str):
+    def _objectify(self, json: dict, type: str) -> Union['Crab', 'Molt']:
         if type.lower() == 'crab':
             id = json['id']
             if id in self._crabs:
@@ -296,8 +298,7 @@ class Bio:
                                         data=new_bio)
         if r.ok:
             self.crab._json = r.json()
-            return True
-        return r
+        return r.ok
 
 
 class Crab:
@@ -376,7 +377,7 @@ class Crab:
     def timestamp(self) -> int:
         return self._json['register_time']
 
-    def follow(self):
+    def follow(self) -> bool:
         """ Follow this Crab as the authenticated user.
         """
         if self.api.access_token:
@@ -387,7 +388,7 @@ class Crab:
             'You are not properly authenticated for this request.'
         )
 
-    def unfollow(self):
+    def unfollow(self) -> bool:
         """ Unfollow this Crab as the authenticated user.
         """
         if self.api.access_token:
@@ -399,8 +400,8 @@ class Crab:
         )
 
     def get_mentions(self, limit: int = 10, offset: int = 0,
-                     since_ts: Optional[Union[int, str]] = None,
-                     since_id=None):
+                     since_ts: Optional[int] = None,
+                     since_id: Optional[int] = None) -> List['Molt']:
         """ Get Molts that mention this user.
         """
         return self.api.get_molts_mentioning(self.username, limit=limit,
@@ -408,20 +409,23 @@ class Crab:
                                              since_id=since_id)
 
     def get_replies(self, limit: int = 10, offset: int = 0,
-                    since_ts: Optional[Union[int, str]] = None, since_id=None):
+                    since_ts: Optional[int] = None,
+                    since_id: Optional[int] = None) -> List['Molt']:
         """ Get Molts that reply to any of this user's Molts.
         """
         return self.api.get_molts_replying_to(self.username, limit=limit,
                                               offset=offset, since_ts=since_ts,
                                               since_id=since_id)
 
-    def get_molts(self, limit=10, offset=0,
-                  since_ts: Optional[Union[int, str]] = None,
-                  since_id=None) -> List['Molt']:
+    def get_molts(self, limit: int = 10, offset: int = 0,
+                  since_ts: Optional[int] = None,
+                  since_id: Optional[int] = None) -> List['Molt']:
+        """ Get this user's Molts.
+        """
         r = self.api._make_request(f'/crabs/{self.id}/molts/',
                                    params={'limit': limit, 'offset': offset,
                                            'since': since_ts,
-                                            'since_id': since_id})
+                                           'since_id': since_id})
         return [self.api._objectify(molt, 'molt')
                 for molt in r.json().get('molts', list())]
 
@@ -487,8 +491,9 @@ class Molt:
     def timestamp(self) -> int:
         return self._json['timestamp']
 
-    def get_replies(self, limit=10, offset=0, since_ts=None, since_id=None) \
-            -> List['Molt']:
+    def get_replies(self, limit: int = 10, offset: int = 0,
+                    since_ts: Optional[int] = None,
+                    since_id: Optional[int] = None) -> List['Molt']:
         """ Get this Molt's replies.
         """
         r = self.api._make_request(f'/molts/{self.id}/replies/',
@@ -498,7 +503,7 @@ class Molt:
         return [self.api._objectify(molt, 'molt')
                 for molt in r.json().get('molts', list())]
 
-    def like(self):
+    def like(self) -> bool:
         """ Like this Molt as the authenticated user.
         """
         if self.api.access_token:
@@ -509,7 +514,7 @@ class Molt:
             'You are not properly authenticated for this request.'
         )
 
-    def unlike(self):
+    def unlike(self) -> bool:
         """ Unlike this Molt as the authenticated user.
         """
         if self.api.access_token:
@@ -520,7 +525,7 @@ class Molt:
             'You are not properly authenticated for this request.'
         )
 
-    def delete(self):
+    def delete(self) -> bool:
         """ Delete this Molt if the authenticated user is the author.
         """
         if self.api.access_token:
@@ -531,7 +536,7 @@ class Molt:
             'You are not properly authenticated for this request.'
         )
 
-    def remolt(self):
+    def remolt(self) -> bool:
         """ Remolt this Molt if the authenticated user is the author.
         """
         if self.api.access_token:
@@ -542,7 +547,7 @@ class Molt:
             'You are not properly authenticated for this request.'
         )
 
-    def unremolt(self):
+    def unremolt(self) -> bool:
         """ Unremolt this Molt if the authenticated user is the author.
         """
         if self.api.access_token:
@@ -553,7 +558,8 @@ class Molt:
             'You are not properly authenticated for this request.'
         )
 
-    def reply(self, content: str, image_path: Optional[str] = None):
+    def reply(self, content: str, image_path: Optional[str] = None) \
+            -> Optional['Molt']:
         """ Reply to this Molt as the authenticated user.
         """
         if len(content) <= 240:
@@ -573,7 +579,7 @@ class Molt:
                 if r.ok:
                     return self.api._objectify(r.json(), 'molt')
                 else:
-                    return False
+                    return None
             else:
                 raise RequiresAuthenticationError(
                     'You are not properly authenticated for this request.'

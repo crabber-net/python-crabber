@@ -20,6 +20,7 @@ class TestAPI:
 
         # Crab doesn't exist
         assert api.get_crab(-2) is None
+        assert api.get_crab_by_username('a') is None
 
         # Valid Crab
         crab = api.get_crab(1)
@@ -32,6 +33,10 @@ class TestAPI:
         # Test Crab caching
         assert api.get_crab(crab.id) is crab
         assert api.get_crab_by_username(crab.username) is crab
+
+        test_user = api.get_crab_by_username('pytest')
+        followers = test_user.followers
+        assert isinstance(followers, list)
 
     def test_get_molt(self):
         api = crabber.API(API_KEY)
@@ -49,6 +54,9 @@ class TestAPI:
 
         # Test Molt caching
         assert api.get_molt(molt.id) is molt
+
+        replies = api.get_molts_replying_to('crabber')
+        assert isinstance(replies, list)
 
     def test_authenticated_actions(self):
         api = crabber.API(API_KEY)
@@ -78,7 +86,7 @@ class TestAPI:
         old_base_url = api.base_url
         api.base_url = 'http://google.com'
         for auth_func, args in auth_funcs:
-            assert auth_func(*args) == False
+            assert not auth_func(*args)
 
         api.base_url = old_base_url
 
@@ -90,7 +98,7 @@ class TestAPI:
         # Test bio
         old_location = this_user.bio.location
         assert this_user.bio.update(location='In a computer!')
-        assert this_user.bio.location != old_location
+        assert this_user.bio.location == 'In a computer!'
         assert this_user.bio.update(location=old_location)
 
         # Test following relationships and actions
@@ -135,9 +143,3 @@ class TestAPI:
         assert reply in pytest_crabtag
         assert molt.delete()
         assert reply.delete()
-
-
-class TestUtils:
-    def test_parse_error_message(self):
-        for error in sample_error_html:
-            assert crabber.utils.parse_error_message(error) is not None
