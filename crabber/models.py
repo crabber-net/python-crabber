@@ -98,6 +98,17 @@ class API:
         return [self._objectify(molt, 'molt')
                 for molt in r.json().get('molts', list())]
 
+    def get_molts_replying_to(self, username: str, limit=10, offset=0,
+                              since_ts=None) \
+            -> List['Molt']:
+        """ Get Molts that reply to Molts submitted by `username`.
+        """
+        r = self._make_request(f'/molts/replying/{username}/',
+                               params={'limit': limit, 'offset': offset,
+                                       'since': since_ts})
+        return [self._objectify(molt, 'molt')
+                for molt in r.json().get('molts', list())]
+
     def post_molt(self, content: str, image_path: Optional[str] = None):
         """ Post new Molt as the authenticated user.
         """
@@ -390,6 +401,13 @@ class Crab:
         """
         return self.api.get_molts_mentioning(self.username, limit=limit,
                                              offset=offset, since_ts=since_ts)
+
+    def get_replies(self, limit: int = 10, offset: int = 0,
+                    since_ts: Optional[Union[int, str]] = None):
+        """ Get Molts that reply to any of this user's Molts.
+        """
+        return self.api.get_molts_replying_to(self.username, limit=limit,
+                                              offset=offset, since_ts=since_ts)
 
     def get_molts(self, limit=10, offset=0,
                   since_ts: Optional[Union[int, str]] = None) -> List['Molt']:
