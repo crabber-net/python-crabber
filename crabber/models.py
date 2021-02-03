@@ -77,35 +77,38 @@ class API:
             return None
 
     def get_molts_with_crabtag(self, crabtag: str, limit=10, offset=0,
-                               since_ts=None) \
+                               since_ts=None, since_id=None) \
             -> List['Molt']:
         """ Get molts that contain the crabtag `crabtag`.
         """
         r = self._make_request(f'/crabtag/{crabtag}/',
                                params={'limit': limit, 'offset': offset,
-                                       'since': since_ts})
+                                       'since': since_ts,
+                                       'since_id': since_id})
         return [self._objectify(molt, 'molt')
                 for molt in r.json().get('molts', list())]
 
     def get_molts_mentioning(self, username: str, limit=10, offset=0,
-                             since_ts=None) \
+                             since_ts=None, since_id=None) \
             -> List['Molt']:
         """ Get Molts that explicitly mention `username`.
         """
         r = self._make_request(f'/molts/mentioning/{username}/',
                                params={'limit': limit, 'offset': offset,
-                                       'since': since_ts})
+                                       'since': since_ts,
+                                        'since_id': since_id})
         return [self._objectify(molt, 'molt')
                 for molt in r.json().get('molts', list())]
 
     def get_molts_replying_to(self, username: str, limit=10, offset=0,
-                              since_ts=None) \
+                              since_ts=None, since_id=None) \
             -> List['Molt']:
         """ Get Molts that reply to Molts submitted by `username`.
         """
         r = self._make_request(f'/molts/replying/{username}/',
                                params={'limit': limit, 'offset': offset,
-                                       'since': since_ts})
+                                       'since': since_ts,
+                                        'since_id': since_id})
         return [self._objectify(molt, 'molt')
                 for molt in r.json().get('molts', list())]
 
@@ -396,24 +399,29 @@ class Crab:
         )
 
     def get_mentions(self, limit: int = 10, offset: int = 0,
-                     since_ts: Optional[Union[int, str]] = None):
+                     since_ts: Optional[Union[int, str]] = None,
+                     since_id=None):
         """ Get Molts that mention this user.
         """
         return self.api.get_molts_mentioning(self.username, limit=limit,
-                                             offset=offset, since_ts=since_ts)
+                                             offset=offset, since_ts=since_ts,
+                                             since_id=since_id)
 
     def get_replies(self, limit: int = 10, offset: int = 0,
-                    since_ts: Optional[Union[int, str]] = None):
+                    since_ts: Optional[Union[int, str]] = None, since_id=None):
         """ Get Molts that reply to any of this user's Molts.
         """
         return self.api.get_molts_replying_to(self.username, limit=limit,
-                                              offset=offset, since_ts=since_ts)
+                                              offset=offset, since_ts=since_ts,
+                                              since_id=since_id)
 
     def get_molts(self, limit=10, offset=0,
-                  since_ts: Optional[Union[int, str]] = None) -> List['Molt']:
+                  since_ts: Optional[Union[int, str]] = None,
+                  since_id=None) -> List['Molt']:
         r = self.api._make_request(f'/crabs/{self.id}/molts/',
                                    params={'limit': limit, 'offset': offset,
-                                           'since': since_ts})
+                                           'since': since_ts,
+                                            'since_id': since_id})
         return [self.api._objectify(molt, 'molt')
                 for molt in r.json().get('molts', list())]
 
@@ -479,12 +487,14 @@ class Molt:
     def timestamp(self) -> int:
         return self._json['timestamp']
 
-    def get_replies(self, limit=10, offset=0, since_ts=None) -> List['Molt']:
+    def get_replies(self, limit=10, offset=0, since_ts=None, since_id=None) \
+            -> List['Molt']:
         """ Get this Molt's replies.
         """
         r = self.api._make_request(f'/molts/{self.id}/replies/',
                                    params={'limit': limit, 'offset': offset,
-                                           'since': since_ts})
+                                           'since': since_ts,
+                                           'since_id': since_id})
         return [self.api._objectify(molt, 'molt')
                 for molt in r.json().get('molts', list())]
 
