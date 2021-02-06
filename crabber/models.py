@@ -4,6 +4,8 @@ import os
 import requests
 from typing import Any, BinaryIO, Dict, List, Optional, Union
 
+MOLT_CHARACTER_LIMIT = 280
+
 
 class API:
     def __init__(self, api_key: str, access_token: Optional[str] = None,
@@ -116,7 +118,7 @@ class API:
             -> Optional['Molt']:
         """ Post new Molt as the authenticated user.
         """
-        if len(content) <= 240:
+        if len(content) <= MOLT_CHARACTER_LIMIT:
             if self.access_token:
                 if image_path:
                     if not os.path.exists(image_path):
@@ -138,7 +140,8 @@ class API:
                     'You are not properly authenticated for this request.'
                 )
         else:
-            raise ValueError('Molts cannot exceed 240 characters.')
+            raise ValueError(f'Molts cannot exceed {MOLT_CHARACTER_LIMIT} '
+                             'characters.')
 
     def _check_connection(self) -> bool:
         r = self._make_request()
