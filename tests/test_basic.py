@@ -1,4 +1,4 @@
-from .context import ACCESS_TOKEN, API_KEY, crabber, sample_error_html
+from .context import ACCESS_TOKEN, API_KEY, crabber, TEACHER_IMAGE
 from datetime import datetime
 import pytest
 
@@ -125,13 +125,30 @@ class TestAPI:
             api.post_molt('A' * 500)
             molt.reply('A' * 500)
 
+        # Test molting
         assert molt in this_user.get_molts()
+        assert molt.editable
+        assert molt.edit('Hello, world!')
+        assert molt.content == 'Hello, world!'
+        assert molt.edit(image_path=TEACHER_IMAGE)
+        assert molt.image
         assert molt.like()
         assert molt.unlike()
         assert molt.remolt() == False
+
+        # Test quote-molts
+        assert molt.quotes == 0
+        quote = molt.quote('hello')
+        assert quote.is_quote
+        assert quote.quoted_molt is molt
+        assert quote.delete()
+        assert quote.deleted
+
+        # Clean up molt
         assert molt.delete()
         assert molt not in this_user.get_molts()
 
+        # Test replies
         molt = api.post_molt('Hello, @PyTest! This is a test Molt and this ' \
                              'action was performed automatically. %pytest')
         assert molt in api.get_molts_mentioning('pytest')
