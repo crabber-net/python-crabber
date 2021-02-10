@@ -19,6 +19,10 @@ class API:
         self._crabs: Dict[int, Optional['Crab']] = dict()
         self._molts: Dict[int, Optional['Molt']] = dict()
 
+        # Remove trailing slash from base_url if exists
+        if self.base_url.endswith('/'):
+            self.base_url = self.base_url[:-1]
+
         self._check_connection()
         if access_token:
             self.authenticate(access_token)
@@ -335,6 +339,15 @@ class Crab:
         return self._json['display_name']
 
     @property
+    def bookmarks(self) -> List['Crab']:
+        bookmarks_json = self.api._get_paginated_data(
+            f'/crabs/{self.id}/bookmarks/',
+            'molts'
+        )
+        return [self.api._objectify(bookmark_json, 'molt')
+                for bookmark_json in bookmarks_json]
+
+    @property
     def followers(self) -> List['Crab']:
         followers_json = self.api._get_paginated_data(
             f'/crabs/{self.id}/followers/',
@@ -439,6 +452,7 @@ class Molt:
         self._json: dict = json
         if not self._json:
             raise ValueError('Cannot construct Molt from empty JSON.')
+        self.deleted: bool = False
 
     def __repr__(self):
         return f'<Molt [{self.id}]>'
@@ -460,8 +474,20 @@ class Molt:
         return datetime.fromtimestamp(self.timestamp)
 
     @property
+    def editable(self) -> bool:
+        return ((datetime.now() - self.datetime).seconds / 60) < 5
+
+    @property
+    def edited(self) -> bool:
+        return self._json['edited']
+
+    @property
     def id(self) -> int:
         return self._json['id']
+
+    @property
+    def is_quote(self) -> int:
+        return self._json['quoted_molt'] is not None
 
     @property
     def is_reply(self) -> int:
@@ -481,8 +507,18 @@ class Molt:
         return self._json['mentions']
 
     @property
+    def quotes(self) -> int:
+        return self._json['quotes']
+
+    @property
     def remolts(self) -> int:
         return self._json['remolts']
+
+    @property
+    def quoted_molt(self) -> Optional['Molt']:
+        original_molt_id = self._json['quoted_molt']
+        if original_molt_id:
+            return self.api.get_molt(original_molt_id)
 
     @property
     def replying_to(self) -> Optional['Molt']:
@@ -505,6 +541,28 @@ class Molt:
                                            'since_id': since_id})
         return [self.api._objectify(molt, 'molt')
                 for molt in r.json().get('molts', list())]
+
+    def bookmark(self) -> bool:
+        """ Bookmark this Molt as the authenticated user.
+        """
+        if self.api.access_token:
+            r = self.api._make_request(f'/molts/{self.id}/bookmark/',
+                                       method='POST')
+            return r.ok
+        raise RequiresAuthenticationError(
+            'You are not properly authenticated for this request.'
+        )
+
+    def unbookmark(self) -> bool:
+        """ Unbookmark this Molt as the authenticated user.
+        """
+        if self.api.access_token:
+            r = self.api._make_request(f'/molts/{self.id}/unbookmark/',
+                                       method='POST')
+            return r.ok
+        raise RequiresAuthenticationError(
+            'You are not properly authenticated for this request.'
+        )
 
     def like(self) -> bool:
         """ Like this Molt as the authenticated user.
@@ -534,6 +592,9 @@ class Molt:
         if self.api.access_token:
             r = self.api._make_request(f'/molts/{self.id}/',
                                        method='DELETE')
+            if r.ok:
+                self.deleted = True
+                self.api._molts[self.id] = None
             return r.ok
         raise RequiresAuthenticationError(
             'You are not properly authenticated for this request.'
@@ -561,24 +622,61 @@ class Molt:
             'You are not properly authenticated for this request.'
         )
 
-    def reply(self, content: str, image_path: Optional[str] = None) \
-            -> Optional['Molt']:
-        """ Reply to this Molt as the authenticated user.
+    def edit(self, content: Optional[str] = None,
+             image_path: Optional[str] = None) -> Optional[bool]:
+        """ Edit this Molt as the authenticated user.
         """
-        if len(content) <= 240:
+        if not (content or image_path):
+            raise TypeError('edit() requires at least one argument '
+                            '\'content\' or \'image_path\'')
+        if len(content or '') <= MOLT_CHARACTER_LIMIT:
             if self.api.access_token:
                 if image_path:
                     if not os.path.exists(image_path):
                         raise FileNotFoundError('The image path provided does '
                                                 'not point to a valid file.')
                     with open(image_path, 'rb') as image_file:
-                        r = self.api._make_request(f'/molts/{self.id}/reply/',
+                        r = self.api._make_request(f'/molts/{self.id}/edit/',
                                                    method='POST',
                                                    data={'content': content},
-                                                   iamge=image_file)
-                r = self.api._make_request(f'/molts/{self.id}/reply/',
-                                           method='POST',
-                                           data={'content': content})
+                                                   image=image_file)
+                else:
+                    r = self.api._make_request(f'/molts/{self.id}/edit/',
+                                               method='POST',
+                                               data={'content': content})
+                if r.ok:
+                    # Update self to new content
+                    self._json = r.json()
+                    return True
+                else:
+                    return None
+            else:
+                raise RequiresAuthenticationError(
+                    'You are not properly authenticated for this request.'
+                )
+        else:
+            raise ValueError(f'Molts cannot exceed {MOLT_CHARACTER_LIMIT} '
+                             'characters.')
+
+    def quote(self, content: str, image_path: Optional[str] = None) \
+            -> Optional['Molt']:
+        """ Quote this Molt as the authenticated user.
+        """
+        if len(content) <= MOLT_CHARACTER_LIMIT:
+            if self.api.access_token:
+                if image_path:
+                    if not os.path.exists(image_path):
+                        raise FileNotFoundError('The image path provided does '
+                                                'not point to a valid file.')
+                    with open(image_path, 'rb') as image_file:
+                        r = self.api._make_request(f'/molts/{self.id}/quote/',
+                                                   method='POST',
+                                                   data={'content': content},
+                                                   image=image_file)
+                else:
+                    r = self.api._make_request(f'/molts/{self.id}/quote/',
+                                               method='POST',
+                                               data={'content': content})
                 if r.ok:
                     return self.api._objectify(r.json(), 'molt')
                 else:
@@ -588,4 +686,36 @@ class Molt:
                     'You are not properly authenticated for this request.'
                 )
         else:
-            raise ValueError('Molts cannot exceed 240 characters.')
+            raise ValueError(f'Molts cannot exceed {MOLT_CHARACTER_LIMIT} '
+                             'characters.')
+
+    def reply(self, content: str, image_path: Optional[str] = None) \
+            -> Optional['Molt']:
+        """ Reply to this Molt as the authenticated user.
+        """
+        if len(content) <= MOLT_CHARACTER_LIMIT:
+            if self.api.access_token:
+                if image_path:
+                    if not os.path.exists(image_path):
+                        raise FileNotFoundError('The image path provided does '
+                                                'not point to a valid file.')
+                    with open(image_path, 'rb') as image_file:
+                        r = self.api._make_request(f'/molts/{self.id}/reply/',
+                                                   method='POST',
+                                                   data={'content': content},
+                                                   image=image_file)
+                else:
+                    r = self.api._make_request(f'/molts/{self.id}/reply/',
+                                               method='POST',
+                                               data={'content': content})
+                if r.ok:
+                    return self.api._objectify(r.json(), 'molt')
+                else:
+                    return None
+            else:
+                raise RequiresAuthenticationError(
+                    'You are not properly authenticated for this request.'
+                )
+        else:
+            raise ValueError(f'Molts cannot exceed {MOLT_CHARACTER_LIMIT} '
+                             'characters.')
