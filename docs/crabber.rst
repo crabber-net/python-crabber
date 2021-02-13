@@ -1,10 +1,7 @@
-crabber package
+API Reference
 ===============
 
-Submodules
-----------
-
-crabber.exceptions module
+Exceptions
 -------------------------
 
 .. automodule:: crabber.exceptions
@@ -12,7 +9,7 @@ crabber.exceptions module
    :undoc-members:
    :show-inheritance:
 
-crabber.models module
+Models
 ---------------------
 
 .. automodule:: crabber.models
@@ -20,10 +17,3 @@ crabber.models module
    :undoc-members:
    :show-inheritance:
 
-Module contents
----------------
-
-.. automodule:: crabber
-   :members:
-   :undoc-members:
-   :show-inheritance:
