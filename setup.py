@@ -1,3 +1,4 @@
+from crabber import __version__
 from setuptools import setup, find_packages
 
 with open('README.md') as f:
@@ -5,7 +6,7 @@ with open('README.md') as f:
 
 setup(
     name='python-crabber',
-    version='1.0.0',
+    version=__version__,
     description='A Python client for the Crabber REST API.',
     long_description=readme,
     long_description_content_type='text/markdown',
