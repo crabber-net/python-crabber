@@ -37,7 +37,8 @@
 
     
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="crabber" href="modules.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -86,17 +87,20 @@
               
             
             
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">crabber package</a><ul>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-crabber.exceptions">crabber.exceptions module</a></li>
-<li><a class="reference internal" href="#module-crabber.models">crabber.models module</a></li>
-<li><a class="reference internal" href="#module-crabber">Module contents</a></li>
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">crabber</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">crabber package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-crabber.exceptions">crabber.exceptions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-crabber.models">crabber.models module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-crabber">Module contents</a></li>
 </ul>
 </li>
 </ul>
-</div>
+</li>
+</ul>
+
             
           
         </div>
@@ -142,6 +146,8 @@
   <ul class="wy-breadcrumbs">
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">crabber</a> &raquo;</li>
         
       <li>crabber package</li>
     
@@ -189,373 +195,993 @@ attempts.</p>
 <span id="crabber-models-module"></span><h2>crabber.models module<a class="headerlink" href="#module-crabber.models" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="crabber.models.API">
-<em class="property">class </em><code class="sig-prename descclassname">crabber.models.</code><code class="sig-name descname">API</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">api_key</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">access_token</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">base_url</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'https://crabber.net'</span></em>, <em class="sig-param"><span class="n">base_endpoint</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'/api/v1'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.API" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">crabber.models.</code><code class="sig-name descname">API</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">api_key</span></em>, <em class="sig-param"><span class="n">access_token</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">base_url</span><span class="o">=</span><span class="default_value">'https://crabber.net'</span></em>, <em class="sig-param"><span class="n">base_endpoint</span><span class="o">=</span><span class="default_value">'/api/v1'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.API" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Establishes a connection with an instance of Crabber.</p>
+<p>This can connect to any fork of Crabber, including one running on your
+local machine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>api_key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Your developer key obtained from the developer page on
+your target instance of Crabber.</p></li>
+<li><p><strong>access_token</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Your access token obtained from the developer page
+on your target instance of Crabber. This is only for authenticated
+endpoints and can be omitted. It can also be provided after
+instantiating the API using <cite>API.authenticate</cite>.</p></li>
+<li><p><strong>base_url</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The URL of the instance of Crabber you want to connect
+to.</p></li>
+<li><p><strong>base_endpoint</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The API endpoint to use when making requests. At
+the current time there is no reason to change this as
+‘/api/v1’ is the only compliant endpoint.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You must provide a protocol (either ‘<a class="reference external" href="http://">http://</a>’ or ‘<a class="reference external" href="https://">https://</a>’)
+in <cite>base_url</cite> otherwise connection will fail.</p>
+</div>
 <dl class="py method">
 <dt id="crabber.models.API.authenticate">
-<code class="sig-name descname">authenticate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">access_token</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.models.API.authenticate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">authenticate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">access_token</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.API.authenticate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Establishes authentication with the server. This can be used to
+declare an <cite>access_token</cite> after instantiating <cite>API</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>access_token</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Your access token obtained from the developer
+page on your target instance of Crabber. This is only for
+authenticated endpoints and can be omitted. It can also be
+provided after instantiating the API using <cite>API.authenticate</cite>.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Bool denoting whether authentication was successful.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.API.get_crab">
-<code class="sig-name descname">get_crab</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">crab_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span><a class="reference internal" href="#crabber.models.Crab" title="crabber.models.Crab">crabber.models.Crab</a><span class="p">]</span><a class="headerlink" href="#crabber.models.API.get_crab" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_crab</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">crab_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.API.get_crab" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a Crab by its ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>crab_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The ID of the Crab to return.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#crabber.models.Crab" title="crabber.models.Crab"><code class="xref py py-class docutils literal notranslate"><span class="pre">Crab</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Crab with <cite>crab_id</cite> if one exists.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.API.get_crab_by_username">
-<code class="sig-name descname">get_crab_by_username</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span><a class="reference internal" href="#crabber.models.Crab" title="crabber.models.Crab">crabber.models.Crab</a><span class="p">]</span><a class="headerlink" href="#crabber.models.API.get_crab_by_username" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_crab_by_username</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.API.get_crab_by_username" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a Crab by its username.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>username</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The username of the Crab to return.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#crabber.models.Crab" title="crabber.models.Crab"><code class="xref py py-class docutils literal notranslate"><span class="pre">Crab</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Crab with <cite>username</cite> if one exists.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.API.get_current_user">
-<code class="sig-name descname">get_current_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#crabber.models.Crab" title="crabber.models.Crab">crabber.models.Crab</a><a class="headerlink" href="#crabber.models.API.get_current_user" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_current_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.API.get_current_user" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the current authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#crabber.models.Crab" title="crabber.models.Crab"><code class="xref py py-class docutils literal notranslate"><span class="pre">Crab</span></code></a>]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Crab if currently authenticated.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.API.get_molt">
-<code class="sig-name descname">get_molt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">molt_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.models.API.get_molt" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_molt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">molt_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.API.get_molt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a Molt by its ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>molt_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The ID of the Molt to return.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Molt with <cite>molt_id</cite> if one exists.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.API.get_molts_mentioning">
-<code class="sig-name descname">get_molts_mentioning</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">limit</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.models.API.get_molts_mentioning" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get Molts that explicitly mention <cite>username</cite>.</p>
+<code class="sig-name descname">get_molts_mentioning</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span></em>, <em class="sig-param"><span class="n">limit</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.API.get_molts_mentioning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all valid Molts that mention a certain username.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>username</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The username to search for.</p></li>
+<li><p><strong>limit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Maximum number of results to return, defaults to 10.
+Max: 50.</p></li>
+<li><p><strong>offset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – How many Molts to skip before applying the limit,
+defaults to 0.</p></li>
+<li><p><strong>since_ts</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts that were posted after this
+timestamp (UTC).</p></li>
+<li><p><strong>since_id</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts whose ID is greater than this.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of Molts found.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This only searches for usernames explicitly mentioned with
+<a class="reference external" href="mailto:'&#37;&#52;&#48;username">‘<span>&#64;</span>username</a>’ and will not return Molts that just include the
+username in their content.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.API.get_molts_replying_to">
-<code class="sig-name descname">get_molts_replying_to</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">limit</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.models.API.get_molts_replying_to" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get Molts that reply to Molts submitted by <cite>username</cite>.</p>
+<code class="sig-name descname">get_molts_replying_to</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span></em>, <em class="sig-param"><span class="n">limit</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.API.get_molts_replying_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all valid Molts that are replying to Molts posted by a certain
+username.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>username</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The username to search for.</p></li>
+<li><p><strong>limit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Maximum number of results to return, defaults to 10.
+Max: 50.</p></li>
+<li><p><strong>offset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – How many Molts to skip before applying the limit,
+defaults to 0.</p></li>
+<li><p><strong>since_ts</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts that were posted after this
+timestamp (UTC).</p></li>
+<li><p><strong>since_id</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts whose ID is greater than this.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of Molts found.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.API.get_molts_with_crabtag">
-<code class="sig-name descname">get_molts_with_crabtag</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">crabtag</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">limit</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.models.API.get_molts_with_crabtag" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get molts that contain the crabtag <cite>crabtag</cite>.</p>
+<code class="sig-name descname">get_molts_with_crabtag</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">crabtag</span></em>, <em class="sig-param"><span class="n">limit</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.API.get_molts_with_crabtag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all valid Molts that use a certain crabtag.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>crabtag</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The crabtag to search for.</p></li>
+<li><p><strong>limit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Maximum number of results to return, defaults to 10.
+Max: 50.</p></li>
+<li><p><strong>offset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – How many Molts to skip before applying the limit,
+defaults to 0.</p></li>
+<li><p><strong>since_ts</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts that were posted after this
+timestamp (UTC).</p></li>
+<li><p><strong>since_id</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts whose ID is greater than this.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of Molts found.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.API.post_molt">
-<code class="sig-name descname">post_molt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">image_path</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.models.API.post_molt" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">post_molt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span></em>, <em class="sig-param"><span class="n">image_path</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.API.post_molt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Post new Molt as the authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The text content of the Molt to post.</p></li>
+<li><p><strong>image_path</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The path to a valid image file that will be
+uploaded and included in this Molt.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The posted Molt if successful.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p>FileNotFoundError, RequiresAuthenticationError, ValueError</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="crabber.models.Bio">
-<em class="property">class </em><code class="sig-prename descclassname">crabber.models.</code><code class="sig-name descname">Bio</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">crab</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#crabber.models.Crab" title="crabber.models.Crab">crabber.models.Crab</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Bio" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">crabber.models.</code><code class="sig-name descname">Bio</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">crab</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Bio" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Contains a Crab’s bio.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not directly instantiate this class. You can access it through
+<cite>Crab.bio</cite> on whatever Crab is of interest.</p>
+</div>
 <dl class="py method">
 <dt id="crabber.models.Bio.age">
 <em class="property">property </em><code class="sig-name descname">age</code><a class="headerlink" href="#crabber.models.Bio.age" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Bio.description">
 <em class="property">property </em><code class="sig-name descname">description</code><a class="headerlink" href="#crabber.models.Bio.description" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Bio.favorite_emoji">
 <em class="property">property </em><code class="sig-name descname">favorite_emoji</code><a class="headerlink" href="#crabber.models.Bio.favorite_emoji" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Bio.jam">
 <em class="property">property </em><code class="sig-name descname">jam</code><a class="headerlink" href="#crabber.models.Bio.jam" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Bio.location">
 <em class="property">property </em><code class="sig-name descname">location</code><a class="headerlink" href="#crabber.models.Bio.location" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Bio.obsession">
 <em class="property">property </em><code class="sig-name descname">obsession</code><a class="headerlink" href="#crabber.models.Bio.obsession" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Bio.pronouns">
 <em class="property">property </em><code class="sig-name descname">pronouns</code><a class="headerlink" href="#crabber.models.Bio.pronouns" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Bio.quote">
 <em class="property">property </em><code class="sig-name descname">quote</code><a class="headerlink" href="#crabber.models.Bio.quote" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Bio.remember_when">
 <em class="property">property </em><code class="sig-name descname">remember_when</code><a class="headerlink" href="#crabber.models.Bio.remember_when" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Bio.update">
-<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">age</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">description</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">favorite_emoji</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">jam</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">location</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">obsession</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">pronouns</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">quote</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">remember_when</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.models.Bio.update" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">age</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">favorite_emoji</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">jam</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">location</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">obsession</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">pronouns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">quote</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">remember_when</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Bio.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the bio of the parent Crab.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="crabber.models.Crab">
-<em class="property">class </em><code class="sig-prename descclassname">crabber.models.</code><code class="sig-name descname">Crab</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json</span><span class="p">:</span> <span class="n">dict</span></em>, <em class="sig-param"><span class="n">api</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#crabber.models.API" title="crabber.models.API">crabber.models.API</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Crab" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">crabber.models.</code><code class="sig-name descname">Crab</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json</span></em>, <em class="sig-param"><span class="n">api</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Crab" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a Crabber user.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not directly instantiate this class. You can access it through
+various methods of <cite>API</cite>.</p>
+</div>
 <dl class="py method">
 <dt id="crabber.models.Crab.avatar">
 <em class="property">property </em><code class="sig-name descname">avatar</code><a class="headerlink" href="#crabber.models.Crab.avatar" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The URL of this Crab’s avatar image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Crab.bio">
 <em class="property">property </em><code class="sig-name descname">bio</code><a class="headerlink" href="#crabber.models.Crab.bio" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This Crab’s bio object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#crabber.models.Bio" title="crabber.models.Bio"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bio</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Crab.bookmarks">
 <em class="property">property </em><code class="sig-name descname">bookmarks</code><a class="headerlink" href="#crabber.models.Crab.bookmarks" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns a list all Molts this Crab has bookmarked in descending
+order of the time at which they were bookmarked.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Crab.display_name">
 <em class="property">property </em><code class="sig-name descname">display_name</code><a class="headerlink" href="#crabber.models.Crab.display_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This Crab’s display name. Display names don’t have to be unique and
+can include spaces, emoji, and really any Unicode characters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Crab.follow">
-<code class="sig-name descname">follow</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.models.Crab.follow" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">follow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Crab.follow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Follow this Crab as the authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether the operation was successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Crab.follower_count">
 <em class="property">property </em><code class="sig-name descname">follower_count</code><a class="headerlink" href="#crabber.models.Crab.follower_count" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The number of followers this Crab currently has.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Crab.followers">
 <em class="property">property </em><code class="sig-name descname">followers</code><a class="headerlink" href="#crabber.models.Crab.followers" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns a list of all of this Crab’s followers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#crabber.models.Crab" title="crabber.models.Crab"><code class="xref py py-class docutils literal notranslate"><span class="pre">Crab</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Crab.following">
 <em class="property">property </em><code class="sig-name descname">following</code><a class="headerlink" href="#crabber.models.Crab.following" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns a list of all the Crabs this Crab currently follows.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#crabber.models.Crab" title="crabber.models.Crab"><code class="xref py py-class docutils literal notranslate"><span class="pre">Crab</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Crab.following_count">
 <em class="property">property </em><code class="sig-name descname">following_count</code><a class="headerlink" href="#crabber.models.Crab.following_count" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The number of Crabs this Crab currently follows.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Crab.get_mentions">
-<code class="sig-name descname">get_mentions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">limit</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.models.Crab.get_mentions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get Molts that mention this user.</p>
+<code class="sig-name descname">get_mentions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">limit</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Crab.get_mentions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all valid Molts that mention this Crab.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>limit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Maximum number of results to return, defaults to 10.
+Max: 50.</p></li>
+<li><p><strong>offset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – How many Molts to skip before applying the limit,
+defaults to 0.</p></li>
+<li><p><strong>since_ts</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts that were posted after this
+timestamp (UTC).</p></li>
+<li><p><strong>since_id</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts whose ID is greater than this.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of Molts found.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Crab.get_molts">
-<code class="sig-name descname">get_molts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">limit</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.models.Crab.get_molts" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get this user’s Molts.</p>
+<code class="sig-name descname">get_molts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">limit</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Crab.get_molts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all valid Molts posted by this Crab.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>limit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Maximum number of results to return, defaults to 10.
+Max: 50.</p></li>
+<li><p><strong>offset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – How many Molts to skip before applying the limit,
+defaults to 0.</p></li>
+<li><p><strong>since_ts</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts that were posted after this
+timestamp (UTC).</p></li>
+<li><p><strong>since_id</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts whose ID is greater than this.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of Molts found.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Crab.get_replies">
-<code class="sig-name descname">get_replies</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">limit</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.models.Crab.get_replies" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get Molts that reply to any of this user’s Molts.</p>
+<code class="sig-name descname">get_replies</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">limit</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Crab.get_replies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all valid Molts that reply to any of this Crab’s Molts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>limit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Maximum number of results to return, defaults to 10.
+Max: 50.</p></li>
+<li><p><strong>offset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – How many Molts to skip before applying the limit,
+defaults to 0.</p></li>
+<li><p><strong>since_ts</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts that were posted after this
+timestamp (UTC).</p></li>
+<li><p><strong>since_id</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts whose ID is greater than this.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of Molts found.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Crab.id">
 <em class="property">property </em><code class="sig-name descname">id</code><a class="headerlink" href="#crabber.models.Crab.id" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This Crab’s ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Crab.is_verified">
 <em class="property">property </em><code class="sig-name descname">is_verified</code><a class="headerlink" href="#crabber.models.Crab.is_verified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Whether this Crab is a verified user.</p>
+<p>Some accounts are verified when they have been confirmed to
+represent a person of interest who others may realistically attempt
+to impersonate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Crab.register_time">
 <em class="property">property </em><code class="sig-name descname">register_time</code><a class="headerlink" href="#crabber.models.Crab.register_time" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The time at which this Crab was registered on Crabber.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Crab.timestamp">
 <em class="property">property </em><code class="sig-name descname">timestamp</code><a class="headerlink" href="#crabber.models.Crab.timestamp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The same as <cite>Crab.register_time</cite> except returned as a UTC timestamp
+instead of a datetime object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Crab.unfollow">
-<code class="sig-name descname">unfollow</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.models.Crab.unfollow" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">unfollow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Crab.unfollow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unfollow this Crab as the authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether the operation was successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Crab.username">
 <em class="property">property </em><code class="sig-name descname">username</code><a class="headerlink" href="#crabber.models.Crab.username" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This Crab’s username.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="crabber.models.Molt">
-<em class="property">class </em><code class="sig-prename descclassname">crabber.models.</code><code class="sig-name descname">Molt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json</span><span class="p">:</span> <span class="n">dict</span></em>, <em class="sig-param"><span class="n">api</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#crabber.models.API" title="crabber.models.API">crabber.models.API</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Molt" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">crabber.models.</code><code class="sig-name descname">Molt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json</span></em>, <em class="sig-param"><span class="n">api</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Molt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a Crabber post.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not directly instantiate this class. You can access it through
+various methods of <cite>API</cite>, <cite>Crab</cite>, and <cite>Molt</cite>.</p>
+</div>
 <dl class="py method">
 <dt id="crabber.models.Molt.author">
 <em class="property">property </em><code class="sig-name descname">author</code><a class="headerlink" href="#crabber.models.Molt.author" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The Crab who posted this Molt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#crabber.models.Crab" title="crabber.models.Crab"><code class="xref py py-class docutils literal notranslate"><span class="pre">Crab</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.bookmark">
-<code class="sig-name descname">bookmark</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.models.Molt.bookmark" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">bookmark</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Molt.bookmark" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bookmark this Molt as the authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether this operation was successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.content">
 <em class="property">property </em><code class="sig-name descname">content</code><a class="headerlink" href="#crabber.models.Molt.content" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The text content of this Molt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.crabtags">
 <em class="property">property </em><code class="sig-name descname">crabtags</code><a class="headerlink" href="#crabber.models.Molt.crabtags" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>List of the crabtags used in this Molt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.datetime">
 <em class="property">property </em><code class="sig-name descname">datetime</code><a class="headerlink" href="#crabber.models.Molt.datetime" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The time at which this Molt was posted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.delete">
-<code class="sig-name descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.models.Molt.delete" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Molt.delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete this Molt if the authenticated user is the author.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether this operation was successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.edit">
-<code class="sig-name descname">edit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">image_path</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span>bool<span class="p">]</span><a class="headerlink" href="#crabber.models.Molt.edit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">edit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">image_path</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Molt.edit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Edit this Molt as the authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The text content to replace the current content
+with.</p></li>
+<li><p><strong>image_path</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The path to a valid image file that will be
+uploaded and replace the current image.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Whether this operation was successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.editable">
 <em class="property">property </em><code class="sig-name descname">editable</code><a class="headerlink" href="#crabber.models.Molt.editable" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Whether this Molt is currently editable.</p>
+<p>Molts are editable for the first five minutes after they are
+posted. Any requests to edit received by the server after that
+point will be rejected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.edited">
 <em class="property">property </em><code class="sig-name descname">edited</code><a class="headerlink" href="#crabber.models.Molt.edited" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Whether this Molt has been edited.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.get_replies">
-<code class="sig-name descname">get_replies</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">limit</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.models.Molt.get_replies" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get this Molt’s replies.</p>
+<code class="sig-name descname">get_replies</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">limit</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Molt.get_replies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all valid Molts that reply to this Molt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>limit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Maximum number of results to return, defaults to 10.
+Max: 50.</p></li>
+<li><p><strong>offset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – How many Molts to skip before applying the limit,
+defaults to 0.</p></li>
+<li><p><strong>since_ts</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts that were posted after this
+timestamp (UTC).</p></li>
+<li><p><strong>since_id</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts whose ID is greater than this.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of Molts found.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.id">
 <em class="property">property </em><code class="sig-name descname">id</code><a class="headerlink" href="#crabber.models.Molt.id" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This Molt’s ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.image">
 <em class="property">property </em><code class="sig-name descname">image</code><a class="headerlink" href="#crabber.models.Molt.image" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The URL of the image contained in this Molt if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.is_quote">
 <em class="property">property </em><code class="sig-name descname">is_quote</code><a class="headerlink" href="#crabber.models.Molt.is_quote" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Whether this Molt is quoting another Molt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.is_reply">
 <em class="property">property </em><code class="sig-name descname">is_reply</code><a class="headerlink" href="#crabber.models.Molt.is_reply" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Whether this Molt is replying to another Molt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.like">
-<code class="sig-name descname">like</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.models.Molt.like" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">like</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Molt.like" title="Permalink to this definition">¶</a></dt>
 <dd><p>Like this Molt as the authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether this operation was successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.likes">
 <em class="property">property </em><code class="sig-name descname">likes</code><a class="headerlink" href="#crabber.models.Molt.likes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The number of likes this Molt has.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.mentions">
 <em class="property">property </em><code class="sig-name descname">mentions</code><a class="headerlink" href="#crabber.models.Molt.mentions" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>List of the usernames mentioned in this Molt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.quote">
-<code class="sig-name descname">quote</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">image_path</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.models.Molt.quote" title="Permalink to this definition">¶</a></dt>
-<dd><p>Quote this Molt as the authenticated user.</p>
+<code class="sig-name descname">quote</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span></em>, <em class="sig-param"><span class="n">image_path</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Molt.quote" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post a new Molt that quotes this one as the authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The text content of the Molt to post.</p></li>
+<li><p><strong>image_path</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The path to a valid image file that will be
+uploaded and included in this Molt.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The posted Molt if successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.quoted_molt">
 <em class="property">property </em><code class="sig-name descname">quoted_molt</code><a class="headerlink" href="#crabber.models.Molt.quoted_molt" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The Molt that this Molt is quoting if this Molt is quoting one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.quotes">
 <em class="property">property </em><code class="sig-name descname">quotes</code><a class="headerlink" href="#crabber.models.Molt.quotes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Number of Molts that quote this Molt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.remolt">
-<code class="sig-name descname">remolt</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.models.Molt.remolt" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">remolt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Molt.remolt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remolt this Molt if the authenticated user is the author.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether this operation was successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.remolts">
 <em class="property">property </em><code class="sig-name descname">remolts</code><a class="headerlink" href="#crabber.models.Molt.remolts" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Number of Remolts this Molt has.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.reply">
-<code class="sig-name descname">reply</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">image_path</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.models.Molt.reply" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reply to this Molt as the authenticated user.</p>
+<code class="sig-name descname">reply</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span></em>, <em class="sig-param"><span class="n">image_path</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Molt.reply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post a new Molt that replies to this one as the authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The text content of the Molt to post.</p></li>
+<li><p><strong>image_path</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The path to a valid image file that will be
+uploaded and included in this Molt.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The posted Molt if successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.replying_to">
 <em class="property">property </em><code class="sig-name descname">replying_to</code><a class="headerlink" href="#crabber.models.Molt.replying_to" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The Molt that this Molt is replying to if this Molt is a reply.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.timestamp">
 <em class="property">property </em><code class="sig-name descname">timestamp</code><a class="headerlink" href="#crabber.models.Molt.timestamp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The same as <cite>Molt.datetime</cite> except returned as a UTC timestamp
+instead of a datetime object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.unbookmark">
-<code class="sig-name descname">unbookmark</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.models.Molt.unbookmark" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">unbookmark</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Molt.unbookmark" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unbookmark this Molt as the authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether this operation was successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.unlike">
-<code class="sig-name descname">unlike</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.models.Molt.unlike" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">unlike</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Molt.unlike" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unlike this Molt as the authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether this operation was successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.models.Molt.unremolt">
-<code class="sig-name descname">unremolt</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.models.Molt.unremolt" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">unremolt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crabber.models.Molt.unremolt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unremolt this Molt if the authenticated user is the author.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether this operation was successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -566,373 +1192,993 @@ attempts.</p>
 <p>Python-Crabber client for the Crabber.net REST API.</p>
 <dl class="py class">
 <dt id="crabber.API">
-<em class="property">class </em><code class="sig-prename descclassname">crabber.</code><code class="sig-name descname">API</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">api_key</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">access_token</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">base_url</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'https://crabber.net'</span></em>, <em class="sig-param"><span class="n">base_endpoint</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">'/api/v1'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.API" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">crabber.</code><code class="sig-name descname">API</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">api_key</span></em>, <em class="sig-param"><span class="n">access_token</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">base_url</span><span class="o">=</span><span class="default_value">'https://crabber.net'</span></em>, <em class="sig-param"><span class="n">base_endpoint</span><span class="o">=</span><span class="default_value">'/api/v1'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.API" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Establishes a connection with an instance of Crabber.</p>
+<p>This can connect to any fork of Crabber, including one running on your
+local machine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>api_key</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Your developer key obtained from the developer page on
+your target instance of Crabber.</p></li>
+<li><p><strong>access_token</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – Your access token obtained from the developer page
+on your target instance of Crabber. This is only for authenticated
+endpoints and can be omitted. It can also be provided after
+instantiating the API using <cite>API.authenticate</cite>.</p></li>
+<li><p><strong>base_url</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The URL of the instance of Crabber you want to connect
+to.</p></li>
+<li><p><strong>base_endpoint</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The API endpoint to use when making requests. At
+the current time there is no reason to change this as
+‘/api/v1’ is the only compliant endpoint.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>You must provide a protocol (either ‘<a class="reference external" href="http://">http://</a>’ or ‘<a class="reference external" href="https://">https://</a>’)
+in <cite>base_url</cite> otherwise connection will fail.</p>
+</div>
 <dl class="py method">
 <dt id="crabber.API.authenticate">
-<code class="sig-name descname">authenticate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">access_token</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.API.authenticate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">authenticate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">access_token</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.API.authenticate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Establishes authentication with the server. This can be used to
+declare an <cite>access_token</cite> after instantiating <cite>API</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>access_token</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – Your access token obtained from the developer
+page on your target instance of Crabber. This is only for
+authenticated endpoints and can be omitted. It can also be
+provided after instantiating the API using <cite>API.authenticate</cite>.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Bool denoting whether authentication was successful.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.API.get_crab">
-<code class="sig-name descname">get_crab</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">crab_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span><a class="reference internal" href="#crabber.models.Crab" title="crabber.models.Crab">crabber.models.Crab</a><span class="p">]</span><a class="headerlink" href="#crabber.API.get_crab" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_crab</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">crab_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.API.get_crab" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a Crab by its ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>crab_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The ID of the Crab to return.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#crabber.models.Crab" title="crabber.models.Crab"><code class="xref py py-class docutils literal notranslate"><span class="pre">Crab</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Crab with <cite>crab_id</cite> if one exists.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.API.get_crab_by_username">
-<code class="sig-name descname">get_crab_by_username</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span><a class="reference internal" href="#crabber.models.Crab" title="crabber.models.Crab">crabber.models.Crab</a><span class="p">]</span><a class="headerlink" href="#crabber.API.get_crab_by_username" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_crab_by_username</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.API.get_crab_by_username" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a Crab by its username.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>username</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The username of the Crab to return.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#crabber.models.Crab" title="crabber.models.Crab"><code class="xref py py-class docutils literal notranslate"><span class="pre">Crab</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Crab with <cite>username</cite> if one exists.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.API.get_current_user">
-<code class="sig-name descname">get_current_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#crabber.models.Crab" title="crabber.models.Crab">crabber.models.Crab</a><a class="headerlink" href="#crabber.API.get_current_user" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_current_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crabber.API.get_current_user" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the current authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#crabber.models.Crab" title="crabber.models.Crab"><code class="xref py py-class docutils literal notranslate"><span class="pre">Crab</span></code></a>]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Crab if currently authenticated.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.API.get_molt">
-<code class="sig-name descname">get_molt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">molt_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.API.get_molt" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_molt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">molt_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.API.get_molt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a Molt by its ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>molt_id</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – The ID of the Molt to return.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Molt with <cite>molt_id</cite> if one exists.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.API.get_molts_mentioning">
-<code class="sig-name descname">get_molts_mentioning</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">limit</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.API.get_molts_mentioning" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get Molts that explicitly mention <cite>username</cite>.</p>
+<code class="sig-name descname">get_molts_mentioning</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span></em>, <em class="sig-param"><span class="n">limit</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.API.get_molts_mentioning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all valid Molts that mention a certain username.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>username</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The username to search for.</p></li>
+<li><p><strong>limit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Maximum number of results to return, defaults to 10.
+Max: 50.</p></li>
+<li><p><strong>offset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – How many Molts to skip before applying the limit,
+defaults to 0.</p></li>
+<li><p><strong>since_ts</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts that were posted after this
+timestamp (UTC).</p></li>
+<li><p><strong>since_id</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts whose ID is greater than this.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of Molts found.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This only searches for usernames explicitly mentioned with
+<a class="reference external" href="mailto:'&#37;&#52;&#48;username">‘<span>&#64;</span>username</a>’ and will not return Molts that just include the
+username in their content.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.API.get_molts_replying_to">
-<code class="sig-name descname">get_molts_replying_to</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">limit</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.API.get_molts_replying_to" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get Molts that reply to Molts submitted by <cite>username</cite>.</p>
+<code class="sig-name descname">get_molts_replying_to</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span></em>, <em class="sig-param"><span class="n">limit</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.API.get_molts_replying_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all valid Molts that are replying to Molts posted by a certain
+username.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>username</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The username to search for.</p></li>
+<li><p><strong>limit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Maximum number of results to return, defaults to 10.
+Max: 50.</p></li>
+<li><p><strong>offset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – How many Molts to skip before applying the limit,
+defaults to 0.</p></li>
+<li><p><strong>since_ts</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts that were posted after this
+timestamp (UTC).</p></li>
+<li><p><strong>since_id</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts whose ID is greater than this.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of Molts found.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.API.get_molts_with_crabtag">
-<code class="sig-name descname">get_molts_with_crabtag</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">crabtag</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">limit</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.API.get_molts_with_crabtag" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get molts that contain the crabtag <cite>crabtag</cite>.</p>
+<code class="sig-name descname">get_molts_with_crabtag</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">crabtag</span></em>, <em class="sig-param"><span class="n">limit</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.API.get_molts_with_crabtag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all valid Molts that use a certain crabtag.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>crabtag</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The crabtag to search for.</p></li>
+<li><p><strong>limit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Maximum number of results to return, defaults to 10.
+Max: 50.</p></li>
+<li><p><strong>offset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – How many Molts to skip before applying the limit,
+defaults to 0.</p></li>
+<li><p><strong>since_ts</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts that were posted after this
+timestamp (UTC).</p></li>
+<li><p><strong>since_id</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts whose ID is greater than this.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of Molts found.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.API.post_molt">
-<code class="sig-name descname">post_molt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">image_path</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.API.post_molt" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">post_molt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span></em>, <em class="sig-param"><span class="n">image_path</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.API.post_molt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Post new Molt as the authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The text content of the Molt to post.</p></li>
+<li><p><strong>image_path</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The path to a valid image file that will be
+uploaded and included in this Molt.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The posted Molt if successful.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p>FileNotFoundError, RequiresAuthenticationError, ValueError</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="crabber.Bio">
-<em class="property">class </em><code class="sig-prename descclassname">crabber.</code><code class="sig-name descname">Bio</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">crab</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#crabber.models.Crab" title="crabber.models.Crab">crabber.models.Crab</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Bio" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">crabber.</code><code class="sig-name descname">Bio</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">crab</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Bio" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Contains a Crab’s bio.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not directly instantiate this class. You can access it through
+<cite>Crab.bio</cite> on whatever Crab is of interest.</p>
+</div>
 <dl class="py method">
 <dt id="crabber.Bio.age">
 <em class="property">property </em><code class="sig-name descname">age</code><a class="headerlink" href="#crabber.Bio.age" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Bio.description">
 <em class="property">property </em><code class="sig-name descname">description</code><a class="headerlink" href="#crabber.Bio.description" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Bio.favorite_emoji">
 <em class="property">property </em><code class="sig-name descname">favorite_emoji</code><a class="headerlink" href="#crabber.Bio.favorite_emoji" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Bio.jam">
 <em class="property">property </em><code class="sig-name descname">jam</code><a class="headerlink" href="#crabber.Bio.jam" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Bio.location">
 <em class="property">property </em><code class="sig-name descname">location</code><a class="headerlink" href="#crabber.Bio.location" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Bio.obsession">
 <em class="property">property </em><code class="sig-name descname">obsession</code><a class="headerlink" href="#crabber.Bio.obsession" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Bio.pronouns">
 <em class="property">property </em><code class="sig-name descname">pronouns</code><a class="headerlink" href="#crabber.Bio.pronouns" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Bio.quote">
 <em class="property">property </em><code class="sig-name descname">quote</code><a class="headerlink" href="#crabber.Bio.quote" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Bio.remember_when">
 <em class="property">property </em><code class="sig-name descname">remember_when</code><a class="headerlink" href="#crabber.Bio.remember_when" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Bio.update">
-<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">age</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">description</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">favorite_emoji</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">jam</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">location</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">obsession</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">pronouns</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">quote</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">remember_when</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.Bio.update" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">age</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">favorite_emoji</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">jam</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">location</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">obsession</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">pronouns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">quote</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">remember_when</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Bio.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the bio of the parent Crab.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="crabber.Crab">
-<em class="property">class </em><code class="sig-prename descclassname">crabber.</code><code class="sig-name descname">Crab</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json</span><span class="p">:</span> <span class="n">dict</span></em>, <em class="sig-param"><span class="n">api</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#crabber.models.API" title="crabber.models.API">crabber.models.API</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Crab" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">crabber.</code><code class="sig-name descname">Crab</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json</span></em>, <em class="sig-param"><span class="n">api</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Crab" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a Crabber user.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not directly instantiate this class. You can access it through
+various methods of <cite>API</cite>.</p>
+</div>
 <dl class="py method">
 <dt id="crabber.Crab.avatar">
 <em class="property">property </em><code class="sig-name descname">avatar</code><a class="headerlink" href="#crabber.Crab.avatar" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The URL of this Crab’s avatar image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Crab.bio">
 <em class="property">property </em><code class="sig-name descname">bio</code><a class="headerlink" href="#crabber.Crab.bio" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This Crab’s bio object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#crabber.models.Bio" title="crabber.models.Bio"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bio</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Crab.bookmarks">
 <em class="property">property </em><code class="sig-name descname">bookmarks</code><a class="headerlink" href="#crabber.Crab.bookmarks" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns a list all Molts this Crab has bookmarked in descending
+order of the time at which they were bookmarked.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Crab.display_name">
 <em class="property">property </em><code class="sig-name descname">display_name</code><a class="headerlink" href="#crabber.Crab.display_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This Crab’s display name. Display names don’t have to be unique and
+can include spaces, emoji, and really any Unicode characters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Crab.follow">
-<code class="sig-name descname">follow</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.Crab.follow" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">follow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Crab.follow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Follow this Crab as the authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether the operation was successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Crab.follower_count">
 <em class="property">property </em><code class="sig-name descname">follower_count</code><a class="headerlink" href="#crabber.Crab.follower_count" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The number of followers this Crab currently has.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Crab.followers">
 <em class="property">property </em><code class="sig-name descname">followers</code><a class="headerlink" href="#crabber.Crab.followers" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns a list of all of this Crab’s followers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#crabber.models.Crab" title="crabber.models.Crab"><code class="xref py py-class docutils literal notranslate"><span class="pre">Crab</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Crab.following">
 <em class="property">property </em><code class="sig-name descname">following</code><a class="headerlink" href="#crabber.Crab.following" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Returns a list of all the Crabs this Crab currently follows.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#crabber.models.Crab" title="crabber.models.Crab"><code class="xref py py-class docutils literal notranslate"><span class="pre">Crab</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Crab.following_count">
 <em class="property">property </em><code class="sig-name descname">following_count</code><a class="headerlink" href="#crabber.Crab.following_count" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The number of Crabs this Crab currently follows.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Crab.get_mentions">
-<code class="sig-name descname">get_mentions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">limit</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.Crab.get_mentions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get Molts that mention this user.</p>
+<code class="sig-name descname">get_mentions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">limit</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Crab.get_mentions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all valid Molts that mention this Crab.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>limit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Maximum number of results to return, defaults to 10.
+Max: 50.</p></li>
+<li><p><strong>offset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – How many Molts to skip before applying the limit,
+defaults to 0.</p></li>
+<li><p><strong>since_ts</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts that were posted after this
+timestamp (UTC).</p></li>
+<li><p><strong>since_id</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts whose ID is greater than this.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of Molts found.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Crab.get_molts">
-<code class="sig-name descname">get_molts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">limit</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.Crab.get_molts" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get this user’s Molts.</p>
+<code class="sig-name descname">get_molts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">limit</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Crab.get_molts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all valid Molts posted by this Crab.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>limit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Maximum number of results to return, defaults to 10.
+Max: 50.</p></li>
+<li><p><strong>offset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – How many Molts to skip before applying the limit,
+defaults to 0.</p></li>
+<li><p><strong>since_ts</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts that were posted after this
+timestamp (UTC).</p></li>
+<li><p><strong>since_id</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts whose ID is greater than this.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of Molts found.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Crab.get_replies">
-<code class="sig-name descname">get_replies</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">limit</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.Crab.get_replies" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get Molts that reply to any of this user’s Molts.</p>
+<code class="sig-name descname">get_replies</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">limit</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Crab.get_replies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all valid Molts that reply to any of this Crab’s Molts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>limit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Maximum number of results to return, defaults to 10.
+Max: 50.</p></li>
+<li><p><strong>offset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – How many Molts to skip before applying the limit,
+defaults to 0.</p></li>
+<li><p><strong>since_ts</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts that were posted after this
+timestamp (UTC).</p></li>
+<li><p><strong>since_id</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts whose ID is greater than this.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of Molts found.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Crab.id">
 <em class="property">property </em><code class="sig-name descname">id</code><a class="headerlink" href="#crabber.Crab.id" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This Crab’s ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Crab.is_verified">
 <em class="property">property </em><code class="sig-name descname">is_verified</code><a class="headerlink" href="#crabber.Crab.is_verified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Whether this Crab is a verified user.</p>
+<p>Some accounts are verified when they have been confirmed to
+represent a person of interest who others may realistically attempt
+to impersonate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Crab.register_time">
 <em class="property">property </em><code class="sig-name descname">register_time</code><a class="headerlink" href="#crabber.Crab.register_time" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The time at which this Crab was registered on Crabber.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Crab.timestamp">
 <em class="property">property </em><code class="sig-name descname">timestamp</code><a class="headerlink" href="#crabber.Crab.timestamp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The same as <cite>Crab.register_time</cite> except returned as a UTC timestamp
+instead of a datetime object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Crab.unfollow">
-<code class="sig-name descname">unfollow</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.Crab.unfollow" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">unfollow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Crab.unfollow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unfollow this Crab as the authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether the operation was successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Crab.username">
 <em class="property">property </em><code class="sig-name descname">username</code><a class="headerlink" href="#crabber.Crab.username" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This Crab’s username.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="crabber.Molt">
-<em class="property">class </em><code class="sig-prename descclassname">crabber.</code><code class="sig-name descname">Molt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json</span><span class="p">:</span> <span class="n">dict</span></em>, <em class="sig-param"><span class="n">api</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#crabber.models.API" title="crabber.models.API">crabber.models.API</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Molt" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">crabber.</code><code class="sig-name descname">Molt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">json</span></em>, <em class="sig-param"><span class="n">api</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Molt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a Crabber post.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Do not directly instantiate this class. You can access it through
+various methods of <cite>API</cite>, <cite>Crab</cite>, and <cite>Molt</cite>.</p>
+</div>
 <dl class="py method">
 <dt id="crabber.Molt.author">
 <em class="property">property </em><code class="sig-name descname">author</code><a class="headerlink" href="#crabber.Molt.author" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The Crab who posted this Molt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#crabber.models.Crab" title="crabber.models.Crab"><code class="xref py py-class docutils literal notranslate"><span class="pre">Crab</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.bookmark">
-<code class="sig-name descname">bookmark</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.Molt.bookmark" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">bookmark</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Molt.bookmark" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bookmark this Molt as the authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether this operation was successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.content">
 <em class="property">property </em><code class="sig-name descname">content</code><a class="headerlink" href="#crabber.Molt.content" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The text content of this Molt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.crabtags">
 <em class="property">property </em><code class="sig-name descname">crabtags</code><a class="headerlink" href="#crabber.Molt.crabtags" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>List of the crabtags used in this Molt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.datetime">
 <em class="property">property </em><code class="sig-name descname">datetime</code><a class="headerlink" href="#crabber.Molt.datetime" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The time at which this Molt was posted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.delete">
-<code class="sig-name descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.Molt.delete" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Molt.delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete this Molt if the authenticated user is the author.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether this operation was successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.edit">
-<code class="sig-name descname">edit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">image_path</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span>bool<span class="p">]</span><a class="headerlink" href="#crabber.Molt.edit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">edit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">image_path</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Molt.edit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Edit this Molt as the authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The text content to replace the current content
+with.</p></li>
+<li><p><strong>image_path</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The path to a valid image file that will be
+uploaded and replace the current image.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Whether this operation was successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.editable">
 <em class="property">property </em><code class="sig-name descname">editable</code><a class="headerlink" href="#crabber.Molt.editable" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Whether this Molt is currently editable.</p>
+<p>Molts are editable for the first five minutes after they are
+posted. Any requests to edit received by the server after that
+point will be rejected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.edited">
 <em class="property">property </em><code class="sig-name descname">edited</code><a class="headerlink" href="#crabber.Molt.edited" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Whether this Molt has been edited.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.get_replies">
-<code class="sig-name descname">get_replies</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">limit</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.Molt.get_replies" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get this Molt’s replies.</p>
+<code class="sig-name descname">get_replies</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">limit</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">since_ts</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">since_id</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Molt.get_replies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all valid Molts that reply to this Molt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>limit</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – Maximum number of results to return, defaults to 10.
+Max: 50.</p></li>
+<li><p><strong>offset</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>) – How many Molts to skip before applying the limit,
+defaults to 0.</p></li>
+<li><p><strong>since_ts</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts that were posted after this
+timestamp (UTC).</p></li>
+<li><p><strong>since_id</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]) – Only return Molts whose ID is greater than this.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of Molts found.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.id">
 <em class="property">property </em><code class="sig-name descname">id</code><a class="headerlink" href="#crabber.Molt.id" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This Molt’s ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.image">
 <em class="property">property </em><code class="sig-name descname">image</code><a class="headerlink" href="#crabber.Molt.image" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The URL of the image contained in this Molt if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.is_quote">
 <em class="property">property </em><code class="sig-name descname">is_quote</code><a class="headerlink" href="#crabber.Molt.is_quote" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Whether this Molt is quoting another Molt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.is_reply">
 <em class="property">property </em><code class="sig-name descname">is_reply</code><a class="headerlink" href="#crabber.Molt.is_reply" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Whether this Molt is replying to another Molt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.like">
-<code class="sig-name descname">like</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.Molt.like" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">like</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Molt.like" title="Permalink to this definition">¶</a></dt>
 <dd><p>Like this Molt as the authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether this operation was successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.likes">
 <em class="property">property </em><code class="sig-name descname">likes</code><a class="headerlink" href="#crabber.Molt.likes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The number of likes this Molt has.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.mentions">
 <em class="property">property </em><code class="sig-name descname">mentions</code><a class="headerlink" href="#crabber.Molt.mentions" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>List of the usernames mentioned in this Molt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.quote">
-<code class="sig-name descname">quote</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">image_path</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.Molt.quote" title="Permalink to this definition">¶</a></dt>
-<dd><p>Quote this Molt as the authenticated user.</p>
+<code class="sig-name descname">quote</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span></em>, <em class="sig-param"><span class="n">image_path</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Molt.quote" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post a new Molt that quotes this one as the authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The text content of the Molt to post.</p></li>
+<li><p><strong>image_path</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The path to a valid image file that will be
+uploaded and included in this Molt.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The posted Molt if successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.quoted_molt">
 <em class="property">property </em><code class="sig-name descname">quoted_molt</code><a class="headerlink" href="#crabber.Molt.quoted_molt" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The Molt that this Molt is quoting if this Molt is quoting one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.quotes">
 <em class="property">property </em><code class="sig-name descname">quotes</code><a class="headerlink" href="#crabber.Molt.quotes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Number of Molts that quote this Molt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.remolt">
-<code class="sig-name descname">remolt</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.Molt.remolt" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">remolt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Molt.remolt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remolt this Molt if the authenticated user is the author.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether this operation was successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.remolts">
 <em class="property">property </em><code class="sig-name descname">remolts</code><a class="headerlink" href="#crabber.Molt.remolts" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Number of Remolts this Molt has.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.reply">
-<code class="sig-name descname">reply</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">image_path</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Optional<span class="p">[</span><a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt">crabber.models.Molt</a><span class="p">]</span><a class="headerlink" href="#crabber.Molt.reply" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reply to this Molt as the authenticated user.</p>
+<code class="sig-name descname">reply</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">content</span></em>, <em class="sig-param"><span class="n">image_path</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Molt.reply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post a new Molt that replies to this one as the authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>) – The text content of the Molt to post.</p></li>
+<li><p><strong>image_path</strong> (<code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]) – The path to a valid image file that will be
+uploaded and included in this Molt.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The posted Molt if successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.replying_to">
 <em class="property">property </em><code class="sig-name descname">replying_to</code><a class="headerlink" href="#crabber.Molt.replying_to" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The Molt that this Molt is replying to if this Molt is a reply.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="#crabber.models.Molt" title="crabber.models.Molt"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molt</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.timestamp">
 <em class="property">property </em><code class="sig-name descname">timestamp</code><a class="headerlink" href="#crabber.Molt.timestamp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The same as <cite>Molt.datetime</cite> except returned as a UTC timestamp
+instead of a datetime object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.unbookmark">
-<code class="sig-name descname">unbookmark</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.Molt.unbookmark" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">unbookmark</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Molt.unbookmark" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unbookmark this Molt as the authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether this operation was successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.unlike">
-<code class="sig-name descname">unlike</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.Molt.unlike" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">unlike</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Molt.unlike" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unlike this Molt as the authenticated user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether this operation was successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="crabber.Molt.unremolt">
-<code class="sig-name descname">unremolt</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#crabber.Molt.unremolt" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">unremolt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crabber.Molt.unremolt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unremolt this Molt if the authenticated user is the author.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether this operation was successful.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -945,6 +2191,9 @@ attempts.</p>
            
           </div>
           <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="modules.html" class="btn btn-neutral float-left" title="crabber" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
 
   <hr/>
 

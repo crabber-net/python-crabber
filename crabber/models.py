@@ -8,6 +8,27 @@ MOLT_CHARACTER_LIMIT = 280
 
 
 class API:
+    """ Establishes a connection with an instance of Crabber.
+
+        This can connect to any fork of Crabber, including one running on your
+        local machine.
+
+        :param api_key: Your developer key obtained from the developer page on
+            your target instance of Crabber.
+        :param access_token: Your access token obtained from the developer page
+            on your target instance of Crabber. This is only for authenticated
+            endpoints and can be omitted. It can also be provided after
+            instantiating the API using `API.authenticate`.
+        :param base_url: The URL of the instance of Crabber you want to connect
+            to.
+        :param base_endpoint: The API endpoint to use when making requests. At
+            the current time there is no reason to change this as
+            '/api/v1' is the only compliant endpoint.
+
+        .. warning::
+            You must provide a protocol (either 'http://' or 'https://')
+            in `base_url` otherwise connection will fail.
+    """
     def __init__(self, api_key: str, access_token: Optional[str] = None,
                  base_url: str = 'https://crabber.net',
                  base_endpoint: str = '/api/v1'):
@@ -28,18 +49,32 @@ class API:
             self.authenticate(access_token)
 
     def authenticate(self, access_token: str) -> bool:
+        """ Establishes authentication with the server. This can be used to
+            declare an `access_token` after instantiating `API`.
+
+            :param access_token: Your access token obtained from the developer
+                page on your target instance of Crabber. This is only for
+                authenticated endpoints and can be omitted. It can also be
+                provided after instantiating the API using `API.authenticate`.
+            :returns: Bool denoting whether authentication was successful.
+        """
         self.access_token = access_token
         r = self._make_request('/authenticate/')
         self.crab = self._objectify(r.json(), 'crab')
         return r.ok
 
-    def get_current_user(self) -> 'Crab':
+    def get_current_user(self) -> Optional['Crab']:
         """ Get the current authenticated user.
+
+            :returns: Crab if currently authenticated.
         """
         return self.crab
 
     def get_crab(self, crab_id: int) -> Optional['Crab']:
         """ Get a Crab by its ID.
+
+            :param crab_id: The ID of the Crab to return.
+            :returns: Crab with `crab_id` if one exists.
         """
         # Crab already cached
         if crab_id in self._crabs:
@@ -55,6 +90,9 @@ class API:
 
     def get_crab_by_username(self, username: str) -> Optional['Crab']:
         """ Get a Crab by its username.
+
+            :param username: The username of the Crab to return.
+            :returns: Crab with `username` if one exists.
         """
         # Crab already cached
         for crab in self._crabs.values():
@@ -69,6 +107,9 @@ class API:
 
     def get_molt(self, molt_id: int) -> Optional['Molt']:
         """ Get a Molt by its ID.
+
+            :param molt_id: The ID of the Molt to return.
+            :returns: Molt with `molt_id` if one exists.
         """
         # Molt already cached
         if molt_id in self._molts:
@@ -85,7 +126,17 @@ class API:
     def get_molts_with_crabtag(self, crabtag: str, limit: int = 10,
                                offset: int = 0, since_ts: Optional[int] = None,
                                since_id: Optional[int] = None) -> List['Molt']:
-        """ Get molts that contain the crabtag `crabtag`.
+        """ Get all valid Molts that use a certain crabtag.
+
+            :param crabtag: The crabtag to search for.
+            :param limit: Maximum number of results to return, defaults to 10.
+                Max: 50.
+            :param offset: How many Molts to skip before applying the limit,
+                defaults to 0.
+            :param since_ts: Only return Molts that were posted after this
+                timestamp (UTC).
+            :param since_id: Only return Molts whose ID is greater than this.
+            :returns: List of Molts found.
         """
         r = self._make_request(f'/crabtag/{crabtag}/',
                                params={'limit': limit, 'offset': offset,
@@ -97,7 +148,22 @@ class API:
     def get_molts_mentioning(self, username: str, limit: int = 10,
                              offset: int = 0, since_ts: Optional[int] = None,
                              since_id: Optional[int] = None) -> List['Molt']:
-        """ Get Molts that explicitly mention `username`.
+        """ Get all valid Molts that mention a certain username.
+
+            :param username: The username to search for.
+            :param limit: Maximum number of results to return, defaults to 10.
+                Max: 50.
+            :param offset: How many Molts to skip before applying the limit,
+                defaults to 0.
+            :param since_ts: Only return Molts that were posted after this
+                timestamp (UTC).
+            :param since_id: Only return Molts whose ID is greater than this.
+            :returns: List of Molts found.
+
+            .. note::
+                This only searches for usernames explicitly mentioned with
+                '@username' and will not return Molts that just include the
+                username in their content.
         """
         r = self._make_request(f'/molts/mentioning/{username}/',
                                params={'limit': limit, 'offset': offset,
@@ -109,7 +175,18 @@ class API:
     def get_molts_replying_to(self, username: str, limit: int = 10,
                               offset: int = 0, since_ts: Optional[int] = None,
                               since_id: Optional[int] = None) -> List['Molt']:
-        """ Get Molts that reply to Molts submitted by `username`.
+        """ Get all valid Molts that are replying to Molts posted by a certain
+            username.
+
+            :param username: The username to search for.
+            :param limit: Maximum number of results to return, defaults to 10.
+                Max: 50.
+            :param offset: How many Molts to skip before applying the limit,
+                defaults to 0.
+            :param since_ts: Only return Molts that were posted after this
+                timestamp (UTC).
+            :param since_id: Only return Molts whose ID is greater than this.
+            :returns: List of Molts found.
         """
         r = self._make_request(f'/molts/replying/{username}/',
                                params={'limit': limit, 'offset': offset,
@@ -121,6 +198,12 @@ class API:
     def post_molt(self, content: str, image_path: Optional[str] = None) \
             -> Optional['Molt']:
         """ Post new Molt as the authenticated user.
+
+            :param content: The text content of the Molt to post.
+            :param image_path: The path to a valid image file that will be
+                uploaded and included in this Molt.
+            :returns: The posted Molt if successful.
+            :raises: FileNotFoundError, RequiresAuthenticationError, ValueError
         """
         if len(content) <= MOLT_CHARACTER_LIMIT:
             if self.access_token:
@@ -148,6 +231,12 @@ class API:
                              'characters.')
 
     def _check_connection(self) -> bool:
+        """ Attempts to make a request to the server to verify that connection
+            details are valid.
+
+            :returns: Whether the request succeeded.
+            :raises: ConnectionError
+        """
         r = self._make_request()
         if r.ok:
             return True
@@ -158,6 +247,12 @@ class API:
     def _get_paginated_data(self, endpoint: str, data_key: str,
                             limit: int = 10, starting_offset: int = 0) \
             -> Dict[str, Any]:
+        """ Gets all pages of data from a paginated endpoint.
+
+            :param limit: The per-request limit.
+            :param starting_offset: The offset to begin from.
+            :returns: The resulting data in a dictionary.
+        """
         json_data = list()
         offset = starting_offset
         while True:
@@ -190,7 +285,8 @@ class API:
                       image: Optional[BinaryIO] = None,
                       max_attempts: int = 10) \
             -> requests.models.Response:
-
+        """ Makes a request to the server.
+        """
         # Ensure endpoint is encapsulated in forward-slashes
         if not endpoint.startswith('/'):
             endpoint = '/' + endpoint
@@ -229,6 +325,9 @@ class API:
             raise MaxTriesError('Failed to complete request.')
 
     def _objectify(self, json: dict, type: str) -> Union['Crab', 'Molt']:
+        """ Makes an object from JSON or returns cached object if available to
+            ensure object continuity.
+        """
         if type.lower() == 'crab':
             id = json['id']
             if id in self._crabs:
@@ -246,6 +345,12 @@ class API:
 
 
 class Bio:
+    """ Contains a Crab's bio.
+
+        .. warning::
+            Do not directly instantiate this class. You can access it through
+            `Crab.bio` on whatever Crab is of interest.
+    """
     def __init__(self, crab: 'Crab'):
         self.crab: 'Crab' = crab
 
@@ -298,6 +403,8 @@ class Bio:
                location: Optional[str] = None, obsession: Optional[str] = None,
                pronouns: Optional[str] = None, quote: Optional[str] = None,
                remember_when: Optional[str] = None) -> bool:
+        """ Updates the bio of the parent Crab.
+        """
         new_bio = dict(age=age, description=description, emoji=favorite_emoji,
                        jam=jam, location=location, obsession=obsession,
                        pronouns=pronouns, quote=quote, remember=remember_when)
@@ -309,6 +416,12 @@ class Bio:
 
 
 class Crab:
+    """ Represents a Crabber user.
+
+        .. warning::
+            Do not directly instantiate this class. You can access it through
+            various methods of `API`.
+    """
     def __init__(self, json: dict, api: 'API'):
         self.api: 'API' = api
         self._bio: Optional[Bio] = None
@@ -321,10 +434,14 @@ class Crab:
 
     @property
     def avatar(self) -> str:
+        """ The URL of this Crab's avatar image.
+        """
         return self.api.base_url + self._json['avatar']
 
     @property
     def bio(self) -> Bio:
+        """ This Crab's bio object.
+        """
         if self._bio is None:
             # Retrieve bio if not cached
             if self._json.get('bio') is None:
@@ -336,10 +453,16 @@ class Crab:
 
     @property
     def display_name(self) -> str:
+        """ This Crab's display name. Display names don't have to be unique and
+            can include spaces, emoji, and really any Unicode characters.
+        """
         return self._json['display_name']
 
     @property
-    def bookmarks(self) -> List['Crab']:
+    def bookmarks(self) -> List['Molt']:
+        """ Returns a list all Molts this Crab has bookmarked in descending
+            order of the time at which they were bookmarked.
+        """
         bookmarks_json = self.api._get_paginated_data(
             f'/crabs/{self.id}/bookmarks/',
             'molts'
@@ -349,6 +472,8 @@ class Crab:
 
     @property
     def followers(self) -> List['Crab']:
+        """ Returns a list of all of this Crab's followers.
+        """
         followers_json = self.api._get_paginated_data(
             f'/crabs/{self.id}/followers/',
             'crabs'
@@ -358,10 +483,14 @@ class Crab:
 
     @property
     def follower_count(self) -> int:
+        """ The number of followers this Crab currently has.
+        """
         return self._json['followers']
 
     @property
     def following(self) -> List['Crab']:
+        """ Returns a list of all the Crabs this Crab currently follows.
+        """
         following_json = self.api._get_paginated_data(
             f'/crabs/{self.id}/following/',
             'crabs'
@@ -371,30 +500,49 @@ class Crab:
 
     @property
     def following_count(self) -> int:
+        """ The number of Crabs this Crab currently follows.
+        """
         return self._json['following']
 
     @property
     def id(self) -> int:
+        """ This Crab's ID.
+        """
         return self._json['id']
 
     @property
     def is_verified(self) -> bool:
+        """ Whether this Crab is a verified user.
+
+            Some accounts are verified when they have been confirmed to
+            represent a person of interest who others may realistically attempt
+            to impersonate.
+        """
         return self._json['verified']
 
     @property
     def username(self) -> str:
+        """ This Crab's username.
+        """
         return self._json['username']
 
     @property
     def register_time(self) -> datetime:
+        """ The time at which this Crab was registered on Crabber.
+        """
         return datetime.fromtimestamp(self.timestamp)
 
     @property
     def timestamp(self) -> int:
+        """ The same as `Crab.register_time` except returned as a UTC timestamp
+            instead of a datetime object.
+        """
         return self._json['register_time']
 
     def follow(self) -> bool:
         """ Follow this Crab as the authenticated user.
+
+            :returns: Whether the operation was successful.
         """
         if self.api.access_token:
             r = self.api._make_request(f'/crabs/{self.id}/follow/',
@@ -406,6 +554,8 @@ class Crab:
 
     def unfollow(self) -> bool:
         """ Unfollow this Crab as the authenticated user.
+
+            :returns: Whether the operation was successful.
         """
         if self.api.access_token:
             r = self.api._make_request(f'/crabs/{self.id}/unfollow/',
@@ -418,7 +568,16 @@ class Crab:
     def get_mentions(self, limit: int = 10, offset: int = 0,
                      since_ts: Optional[int] = None,
                      since_id: Optional[int] = None) -> List['Molt']:
-        """ Get Molts that mention this user.
+        """ Get all valid Molts that mention this Crab.
+
+            :param limit: Maximum number of results to return, defaults to 10.
+                Max: 50.
+            :param offset: How many Molts to skip before applying the limit,
+                defaults to 0.
+            :param since_ts: Only return Molts that were posted after this
+                timestamp (UTC).
+            :param since_id: Only return Molts whose ID is greater than this.
+            :returns: List of Molts found.
         """
         return self.api.get_molts_mentioning(self.username, limit=limit,
                                              offset=offset, since_ts=since_ts,
@@ -427,7 +586,16 @@ class Crab:
     def get_replies(self, limit: int = 10, offset: int = 0,
                     since_ts: Optional[int] = None,
                     since_id: Optional[int] = None) -> List['Molt']:
-        """ Get Molts that reply to any of this user's Molts.
+        """ Get all valid Molts that reply to any of this Crab's Molts.
+
+            :param limit: Maximum number of results to return, defaults to 10.
+                Max: 50.
+            :param offset: How many Molts to skip before applying the limit,
+                defaults to 0.
+            :param since_ts: Only return Molts that were posted after this
+                timestamp (UTC).
+            :param since_id: Only return Molts whose ID is greater than this.
+            :returns: List of Molts found.
         """
         return self.api.get_molts_replying_to(self.username, limit=limit,
                                               offset=offset, since_ts=since_ts,
@@ -436,7 +604,16 @@ class Crab:
     def get_molts(self, limit: int = 10, offset: int = 0,
                   since_ts: Optional[int] = None,
                   since_id: Optional[int] = None) -> List['Molt']:
-        """ Get this user's Molts.
+        """ Get all valid Molts posted by this Crab.
+
+            :param limit: Maximum number of results to return, defaults to 10.
+                Max: 50.
+            :param offset: How many Molts to skip before applying the limit,
+                defaults to 0.
+            :param since_ts: Only return Molts that were posted after this
+                timestamp (UTC).
+            :param since_id: Only return Molts whose ID is greater than this.
+            :returns: List of Molts found.
         """
         r = self.api._make_request(f'/crabs/{self.id}/molts/',
                                    params={'limit': limit, 'offset': offset,
@@ -447,6 +624,12 @@ class Crab:
 
 
 class Molt:
+    """ Represents a Crabber post.
+
+        .. warning::
+            Do not directly instantiate this class. You can access it through
+            various methods of `API`, `Crab`, and `Molt`.
+    """
     def __init__(self, json: dict, api: 'API'):
         self.api: 'API' = api
         self._json: dict = json
@@ -459,81 +642,129 @@ class Molt:
 
     @property
     def author(self) -> Crab:
+        """ The Crab who posted this Molt.
+        """
         return self.api.get_crab(self._json['author']['id'])
 
     @property
     def content(self) -> str:
+        """ The text content of this Molt.
+        """
         return self._json['content']
 
     @property
     def crabtags(self) -> List[str]:
+        """ List of the crabtags used in this Molt.
+        """
         return self._json['crabtags']
 
     @property
     def datetime(self) -> datetime:
+        """ The time at which this Molt was posted.
+        """
         return datetime.fromtimestamp(self.timestamp)
 
     @property
     def editable(self) -> bool:
+        """ Whether this Molt is currently editable.
+
+            Molts are editable for the first five minutes after they are
+            posted. Any requests to edit received by the server after that
+            point will be rejected.
+        """
         return ((datetime.now() - self.datetime).seconds / 60) < 5
 
     @property
     def edited(self) -> bool:
+        """ Whether this Molt has been edited.
+        """
         return self._json['edited']
 
     @property
     def id(self) -> int:
+        """ This Molt's ID.
+        """
         return self._json['id']
 
     @property
     def is_quote(self) -> int:
+        """ Whether this Molt is quoting another Molt.
+        """
         return self._json['quoted_molt'] is not None
 
     @property
     def is_reply(self) -> int:
+        """ Whether this Molt is replying to another Molt.
+        """
         return self._json['replying_to'] is not None
 
     @property
     def image(self) -> Optional[str]:
+        """ The URL of the image contained in this Molt if it exists.
+        """
         if self._json['image']:
             return self.api.base_url + self._json['image']
 
     @property
     def likes(self) -> int:
+        """ The number of likes this Molt has.
+        """
         return self._json['likes']
 
     @property
     def mentions(self) -> List[str]:
+        """ List of the usernames mentioned in this Molt.
+        """
         return self._json['mentions']
 
     @property
     def quotes(self) -> int:
+        """ Number of Molts that quote this Molt.
+        """
         return self._json['quotes']
 
     @property
     def remolts(self) -> int:
+        """ Number of Remolts this Molt has.
+        """
         return self._json['remolts']
 
     @property
     def quoted_molt(self) -> Optional['Molt']:
+        """ The Molt that this Molt is quoting if this Molt is quoting one.
+        """
         original_molt_id = self._json['quoted_molt']
         if original_molt_id:
             return self.api.get_molt(original_molt_id)
 
     @property
     def replying_to(self) -> Optional['Molt']:
+        """ The Molt that this Molt is replying to if this Molt is a reply.
+        """
         original_molt_id = self._json['replying_to']
         if original_molt_id:
             return self.api.get_molt(original_molt_id)
 
     @property
     def timestamp(self) -> int:
+        """ The same as `Molt.datetime` except returned as a UTC timestamp
+            instead of a datetime object.
+        """
         return self._json['timestamp']
 
     def get_replies(self, limit: int = 10, offset: int = 0,
                     since_ts: Optional[int] = None,
                     since_id: Optional[int] = None) -> List['Molt']:
-        """ Get this Molt's replies.
+        """ Get all valid Molts that reply to this Molt.
+
+            :param limit: Maximum number of results to return, defaults to 10.
+                Max: 50.
+            :param offset: How many Molts to skip before applying the limit,
+                defaults to 0.
+            :param since_ts: Only return Molts that were posted after this
+                timestamp (UTC).
+            :param since_id: Only return Molts whose ID is greater than this.
+            :returns: List of Molts found.
         """
         r = self.api._make_request(f'/molts/{self.id}/replies/',
                                    params={'limit': limit, 'offset': offset,
@@ -544,6 +775,8 @@ class Molt:
 
     def bookmark(self) -> bool:
         """ Bookmark this Molt as the authenticated user.
+
+            :returns: Whether this operation was successful.
         """
         if self.api.access_token:
             r = self.api._make_request(f'/molts/{self.id}/bookmark/',
@@ -555,6 +788,8 @@ class Molt:
 
     def unbookmark(self) -> bool:
         """ Unbookmark this Molt as the authenticated user.
+
+            :returns: Whether this operation was successful.
         """
         if self.api.access_token:
             r = self.api._make_request(f'/molts/{self.id}/unbookmark/',
@@ -566,6 +801,8 @@ class Molt:
 
     def like(self) -> bool:
         """ Like this Molt as the authenticated user.
+
+            :returns: Whether this operation was successful.
         """
         if self.api.access_token:
             r = self.api._make_request(f'/molts/{self.id}/like/',
@@ -577,6 +814,8 @@ class Molt:
 
     def unlike(self) -> bool:
         """ Unlike this Molt as the authenticated user.
+
+            :returns: Whether this operation was successful.
         """
         if self.api.access_token:
             r = self.api._make_request(f'/molts/{self.id}/unlike/',
@@ -588,6 +827,8 @@ class Molt:
 
     def delete(self) -> bool:
         """ Delete this Molt if the authenticated user is the author.
+
+            :returns: Whether this operation was successful.
         """
         if self.api.access_token:
             r = self.api._make_request(f'/molts/{self.id}/',
@@ -602,6 +843,8 @@ class Molt:
 
     def remolt(self) -> bool:
         """ Remolt this Molt if the authenticated user is the author.
+
+            :returns: Whether this operation was successful.
         """
         if self.api.access_token:
             r = self.api._make_request(f'/molts/{self.id}/remolt/',
@@ -613,6 +856,8 @@ class Molt:
 
     def unremolt(self) -> bool:
         """ Unremolt this Molt if the authenticated user is the author.
+
+            :returns: Whether this operation was successful.
         """
         if self.api.access_token:
             r = self.api._make_request(f'/molts/{self.id}/remolt/',
@@ -625,6 +870,12 @@ class Molt:
     def edit(self, content: Optional[str] = None,
              image_path: Optional[str] = None) -> Optional[bool]:
         """ Edit this Molt as the authenticated user.
+
+            :param content: The text content to replace the current content
+                with.
+            :param image_path: The path to a valid image file that will be
+                uploaded and replace the current image.
+            :returns: Whether this operation was successful.
         """
         if not (content or image_path):
             raise TypeError('edit() requires at least one argument '
@@ -660,7 +911,12 @@ class Molt:
 
     def quote(self, content: str, image_path: Optional[str] = None) \
             -> Optional['Molt']:
-        """ Quote this Molt as the authenticated user.
+        """ Post a new Molt that quotes this one as the authenticated user.
+
+            :param content: The text content of the Molt to post.
+            :param image_path: The path to a valid image file that will be
+                uploaded and included in this Molt.
+            :returns: The posted Molt if successful.
         """
         if len(content) <= MOLT_CHARACTER_LIMIT:
             if self.api.access_token:
@@ -691,7 +947,12 @@ class Molt:
 
     def reply(self, content: str, image_path: Optional[str] = None) \
             -> Optional['Molt']:
-        """ Reply to this Molt as the authenticated user.
+        """ Post a new Molt that replies to this one as the authenticated user.
+
+            :param content: The text content of the Molt to post.
+            :param image_path: The path to a valid image file that will be
+                uploaded and included in this Molt.
+            :returns: The posted Molt if successful.
         """
         if len(content) <= MOLT_CHARACTER_LIMIT:
             if self.api.access_token:
