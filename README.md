@@ -11,11 +11,12 @@ A Python client for the Crabber.net REST API.
 pip install python-crabber
 ```
 
-## Usage
+## Documentation
 
-There is not currently any documentation for this project, but you should be
-able to find your way around fairly easily. Use Python's `help()` function to
-view the properties and methods included this module.
+You can find the full documentation at
+[ReadTheDocs](https://python-crabber.readthedocs.io/en/latest/).
+
+## Usage
 
 ``` python3
 >>> import crabber
