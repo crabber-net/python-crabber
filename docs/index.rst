@@ -1,16 +1,20 @@
-.. python-crabber documentation master file, created by
-   sphinx-quickstart on Sat Feb 13 08:12:37 2021.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-Welcome to python-crabber's documentation!
+python-crabber
 ==========================================
+
+python-crabber is a Python client for the Crabber.net REST API.
+
+Overview
+========
+
+With this module you can create all sorts of extensions that interface with the
+Crabber website. Everything from bots to full-blown Crabber clients!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
-   crabber
+   installation.rst
+   usage/index.rst
+   crabber.rst
 
 
 Indices and tables
