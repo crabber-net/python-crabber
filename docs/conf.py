@@ -53,9 +53,6 @@ add_module_names = False
 
 master_doc = "index"
 
-nitpicky = True
-nitpick_ignore = [('py:class', 'type')]
-
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for

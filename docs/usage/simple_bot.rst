@@ -48,9 +48,9 @@ we've processed.
    }
 
 Alright, now we'll update our bot to use this new file. Most of the Molt
-retrieving methods including :meth:`Crab.get_mentions()` support a parameter
-called `since_id` which limits the results to Molts that have an ID greater than
-the one provided. We'll use that here.
+retrieving methods including :meth:`~crabber.models.Crab.get_mentions()` support
+a parameter called `since_id` which limits the results to Molts that have an ID
+greater than the one provided. We'll use that here.
 
 .. code-block:: python3
    :caption: simple_bot.py

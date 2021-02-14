@@ -51,8 +51,9 @@ The first thing we'll have to do is create an instance of the Crabber API.
    api.post_molt('Hello, world!')
 
 Nice! Now if you were to run that interactively you would notice that
-:meth:`API.post_molt` returns a :class:`Molt` object. This object is the
-Molt you've just posted, you can read the contents like this:
+:meth:`~crabber.models.API.post_molt` returns a :class:`~crabber.models.Molt`
+object. This object is the Molt you've just posted, you can read the contents
+like this:
 
 .. code-block:: python3
 

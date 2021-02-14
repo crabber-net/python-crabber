@@ -1,3 +1,6 @@
+.. py:module:: crabber.models
+.. py:currentmodule:: crabber.models
+
 Models
 ======
 
