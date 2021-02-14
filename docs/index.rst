@@ -14,7 +14,7 @@ Crabber website. Everything from bots to full-blown Crabber clients!
 
    installation.rst
    usage/index.rst
-   crabber.rst
+   reference/index.rst
 
 
 Indices and tables

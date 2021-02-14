@@ -54,6 +54,7 @@ add_module_names = False
 master_doc = "index"
 
 nitpicky = True
+nitpick_ignore = [('py:class', 'type')]
 
 # -- Options for HTML output -------------------------------------------------
 

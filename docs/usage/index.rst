@@ -2,7 +2,7 @@ Usage
 =====
 
 .. toctree::
-   :maxdepth: 2021
+   :maxdepth: 2
 
    basics
    simple_bot
