@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "python-crabber"
+version = "1.1.1"
+description = "A Python client for the Crabber REST API."
+authors = ["Jake Ledoux <contactjakeledoux@gmail.com>"]
+license = "GPL-2.0-only"
+readme = "README.md"
+homepage = "https://pypi.org/project/python-crabber"
+repository = "https://github.com/crabber-net/python-crabber.git"
+documentation = "https://python-crabber.readthedocs.io/en/latest/"
+packages = [
+    { include = "crabber" }
+]
+
+[tool.poetry.dependencies]
+python = ">=3.7,<3.11"
+requests = "^2.26.0"
+
+[tool.poetry.dev-dependencies]
+pytest-cov = "^3.0.0"
+pytest = "^6.2.5"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

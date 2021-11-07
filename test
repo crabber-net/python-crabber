@@ -1,5 +1,0 @@
-if which python3 | grep -q python-crabber; then
-    pytest --cov=crabber/ tests/
-else
-    echo You are not in the python-crabber environment.
-fi

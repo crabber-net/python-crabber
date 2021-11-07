@@ -1,7 +1,0 @@
-if which python3 | grep -q python-crabber; then
-    pip install --upgrade setuptools wheel twine
-    python setup.py sdist bdist_wheel
-    python -m twine upload dist/* --repository python-crabber --skip-existing
-else
-    echo You are not in the python-crabber environment.
-fi

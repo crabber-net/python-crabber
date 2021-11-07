@@ -3,4 +3,4 @@
 from .models import API, Bio, Crab, Molt
 
 __all__ = ['API', 'Bio', 'Crab', 'Molt']
-__version__ = '1.1.0'
+__version__ = '1.1.1'
